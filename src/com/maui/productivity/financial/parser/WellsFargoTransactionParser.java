@@ -9,8 +9,8 @@ import java.io.IOException;
 import java.io.Reader;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 public class WellsFargoTransactionParser implements TransactionParser {
 
@@ -21,10 +21,10 @@ public class WellsFargoTransactionParser implements TransactionParser {
     private static DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("MM/dd/yyyy");
 
     @Override
-    public Set<Transaction> parse(final Reader reader) throws IOException  {
+    public List<Transaction> parse(final Reader reader) throws IOException  {
         final CSVParser parser = CSVFormat.DEFAULT.parse(reader);
 
-        final HashSet<Transaction> transactions = new HashSet<>();
+        final ArrayList<Transaction> transactions = new ArrayList<>();
         for (final CSVRecord record : parser) {
             final LocalDate date = LocalDate.parse(record.get(DATE_COLUMN_INDEX), DATE_FORMATTER);
             final double amount = Double.parseDouble(record.get(AMOUNT_COLUMN_INDEX));

@@ -4,8 +4,8 @@ import com.maui.productivity.financial.model.Transaction;
 
 import java.io.IOException;
 import java.io.Reader;
-import java.util.Set;
+import java.util.List;
 
 public interface TransactionParser {
-    Set<Transaction> parse(final Reader reader) throws IOException;
+    List<Transaction> parse(final Reader reader) throws IOException;
 }
