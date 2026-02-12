@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.maui.productivity.financial.datastore.JsonFileTransactionStore;
 import com.maui.productivity.financial.datastore.TransactionStore;
 import com.maui.productivity.financial.manager.ImportManager;
+import com.maui.productivity.financial.manager.TagManager;
+import com.maui.productivity.financial.manager.tag.Schema;
 import com.maui.productivity.financial.parser.TransactionParser;
 import com.maui.productivity.financial.parser.WellsFargoTransactionParser;
 import lombok.extern.log4j.Log4j2;
@@ -16,7 +18,8 @@ public class Main {
     private static final TransactionStore datastore = new JsonFileTransactionStore(PATH_TO_TRANSACTIONS_JSON_DATASTORE, objectMapper);
 
     private static final TransactionParser transactionParser = new WellsFargoTransactionParser();
-    private static final ImportManager importManager = new ImportManager(transactionParser);
+    private static final TagManager tagManager = new TagManager(Schema.TAG_RULES);
+    private static final ImportManager importManager = new ImportManager(transactionParser, tagManager);
 
     static {
         objectMapper.findAndRegisterModules();
@@ -26,8 +29,8 @@ public class Main {
         log.info("Hello and welcome!");
 
         try {
-            importTransactions("data/Checking2.csv");
-            //importTransactions("data/CreditCard4.csv");
+            //importTransactions("data/Checking2.csv");
+            importTransactions("data/CreditCard4.csv");
 
             //datastore.storeTransactions(taggedTransactions);
             //log.info("Successfully store transactions at {}", PATH_TO_TRANSACTIONS_JSON_DATASTORE);

@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ImportManager {
     private final TransactionParser transactionParser;
+    private final TagManager tagManager;
 
     public void importTransactions(final String pathToFile, final TransactionStore transactionStore, final boolean removeDuplicates) {
         try {
@@ -26,7 +27,7 @@ public class ImportManager {
             final List<Transaction> newTransactions = removeDuplicates ? removeDuplicates(parsedTransactions, transactionStore) : parsedTransactions;
             log.info("Import transactions: parsed={} new={}", parsedTransactions.size(), newTransactions.size());
 
-            final List<TaggedTransaction> newTaggedTransactions = tagTransactions(newTransactions, transactionStore);
+            final List<TaggedTransaction> newTaggedTransactions = tagManager.tagTransactions(newTransactions);
 
             transactionStore.storeTransactions(newTaggedTransactions, true /* append */);
             log.info("Appended {} new transactions", newTaggedTransactions.size());
@@ -42,12 +43,6 @@ public class ImportManager {
 
         return transactions.stream()
                 .filter(transaction -> !existingTransactions.contains(transaction))
-                .toList();
-    }
-
-    private List<TaggedTransaction> tagTransactions(final List<Transaction> transactions, final TransactionStore transactionStore) {
-        return transactions.stream()
-                .map(transaction -> new TaggedTransaction(transaction, new HashSet<>()))
                 .toList();
     }
 }

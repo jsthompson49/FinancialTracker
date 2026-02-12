@@ -9,7 +9,9 @@ import lombok.extern.log4j.Log4j2;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Log4j2
 @RequiredArgsConstructor
@@ -34,8 +36,12 @@ public class JsonFileTransactionStore implements TransactionStore {
         try {
             final List<TaggedTransaction> transactionsToWrite = append ? fetchTransactions() : new ArrayList<>();
             transactionsToWrite.addAll(transactions);
-            objectMapper.writeValue(getFile(), transactionsToWrite);
-            log.info("Stored {} transactions to {}", transactionsToWrite.size(), pathToStore);
+
+            final List<TaggedTransaction> sortedTransactions = transactionsToWrite.stream()
+                    .sorted(Comparator.comparing(TaggedTransaction.DATE_EXTRACTOR).thenComparing(TaggedTransaction.DESCRIPTION_EXTRACTOR))
+                    .collect(Collectors.toList());
+            objectMapper.writeValue(getFile(), sortedTransactions);
+            log.info("Stored {} transactions to {}", sortedTransactions.size(), pathToStore);
         } catch (final IOException ioException) {
             throw new RuntimeException(ioException);
         }
