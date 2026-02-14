@@ -4,13 +4,18 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.maui.productivity.financial.datastore.JsonFileTransactionStore;
 import com.maui.productivity.financial.datastore.TransactionStore;
 import com.maui.productivity.financial.manager.ImportManager;
+import com.maui.productivity.financial.manager.MonthlyCategoryDataAccessor;
 import com.maui.productivity.financial.manager.TagManager;
 import com.maui.productivity.financial.manager.tag.Schema;
+import com.maui.productivity.financial.model.DataAccessor;
 import com.maui.productivity.financial.model.TaggedTransaction;
+import com.maui.productivity.financial.model.Transaction;
 import com.maui.productivity.financial.parser.TransactionParser;
 import com.maui.productivity.financial.parser.WellsFargoTransactionParser;
 import lombok.extern.log4j.Log4j2;
 
+import java.time.Month;
+import java.time.YearMonth;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -37,9 +42,20 @@ public class Main {
             //importTransactions("data/Checking2.csv");
             //importTransactions("data/CreditCard4.csv");
 
-            reapplyTags(true /* replace */);
+            //reapplyTags(true /* replace */);
 
             listByTag(Schema.CATEGORY);
+
+            reportMonthlyRollup(
+                    List.of(
+                            YearMonth.of(2026, Month.JANUARY)
+                    ),
+                    List.of(
+                            Schema.CATEGORY_UTILITIES.getValue(),
+                            Schema.CATEGORY_DONATION.getValue()
+                    )
+            );
+
             //datastore.storeTransactions(taggedTransactions);
             //log.info("Successfully store transactions at {}", PATH_TO_TRANSACTIONS_JSON_DATASTORE);
         } catch (final Exception e) {
@@ -68,4 +84,30 @@ public class Main {
             entrySet.getValue().forEach(taggedTransaction -> log.info("     {}", taggedTransaction));
         });
     }
+
+    private static void reportMonthlyRollup(final List<YearMonth> months, final List<String> categories) {
+        final List<TaggedTransaction> taggedTransactions = datastore.fetchTransactions();
+        final MonthlyCategoryDataAccessor dataAccessor = new MonthlyCategoryDataAccessor(taggedTransactions, tagManager);
+
+        for (final YearMonth month : months) {
+            log.info("=====================================================");
+            log.info(month);
+            double monthTotal = 0.0;
+            for (final String category : categories) {
+                log.info("*** {}", category);
+                final List<TaggedTransaction> transactions = dataAccessor.getTransactions(month, category);
+                double categoryTotal = 0.0;
+                for (final TaggedTransaction taggedTransaction : transactions) {
+                    final Transaction transaction = taggedTransaction.getTransaction();
+                    categoryTotal += transaction.getAmount();
+                    log.info("    {}: {} - {}", transaction.getDate(), transaction.getAmount(), transaction.getDescription());
+                }
+                monthTotal += categoryTotal;
+                log.info("         Total: {}", categoryTotal);
+            }
+            log.info("--------------------------------");
+            log.info("         Total: {}", monthTotal);
+        }
+    }
+
 }
