@@ -16,6 +16,7 @@ public class Schema {
     private static final String HOME = "Home";
     private static final String INSURANCE = "Insurance";
     private static final String INTEREST = "Interest";
+    private static final String REIMBURSEMENT = "Reimbursement";
     private static final String SHOPPING = "Shopping";
     private static final String STREAMING_SERVICE = "StreamingService";
     private static final String TAXES = "Taxes";
@@ -30,6 +31,7 @@ public class Schema {
     public static final Tag CATEGORY_HOME = new Tag(CATEGORY, HOME);
     public static final Tag CATEGORY_INSURANCE = new Tag(CATEGORY, INSURANCE);
     public static final Tag CATEGORY_INTEREST = new Tag(CATEGORY, INTEREST);
+    public static final Tag CATEGORY_REIMBURSEMENT = new Tag(CATEGORY, REIMBURSEMENT);
     public static final Tag CATEGORY_SHOPPING = new Tag(CATEGORY, SHOPPING);
     public static final Tag CATEGORY_STREAMING_SERVICE = new Tag(CATEGORY, STREAMING_SERVICE);
     public static final Tag CATEGORY_TAXES = new Tag(CATEGORY, TAXES);
@@ -81,6 +83,7 @@ public class Schema {
                 ENTERTAINMENT_EVENT,
                 HOME,
                 INSURANCE,
+                REIMBURSEMENT,
                 SHOPPING,
                 STREAMING_SERVICE,
                 TAXES,

@@ -6,8 +6,10 @@ import com.maui.productivity.financial.datastore.TransactionStore;
 import com.maui.productivity.financial.manager.ImportManager;
 import com.maui.productivity.financial.manager.MonthlyCategoryDataAccessor;
 import com.maui.productivity.financial.manager.TagManager;
+import com.maui.productivity.financial.manager.tag.DesignatedDateAmountTagRule;
+import com.maui.productivity.financial.manager.tag.DesignatedTransactions;
 import com.maui.productivity.financial.manager.tag.Schema;
-import com.maui.productivity.financial.model.DataAccessor;
+import com.maui.productivity.financial.model.TagRule;
 import com.maui.productivity.financial.model.TaggedTransaction;
 import com.maui.productivity.financial.model.Transaction;
 import com.maui.productivity.financial.parser.TransactionParser;
@@ -16,6 +18,7 @@ import lombok.extern.log4j.Log4j2;
 
 import java.time.Month;
 import java.time.YearMonth;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -27,19 +30,25 @@ public class Main {
     private static final ObjectMapper objectMapper = new ObjectMapper();
     private static final TransactionStore datastore = new JsonFileTransactionStore(PATH_TO_TRANSACTIONS_JSON_DATASTORE, objectMapper);
 
-    private static final TransactionParser transactionParser = new WellsFargoTransactionParser();
-    private static final TagManager tagManager = new TagManager(Schema.TAG_RULES);
-    private static final ImportManager importManager = new ImportManager(transactionParser, tagManager);
+    private static final List<TagRule> tagRules = new ArrayList<>();
 
     static {
         objectMapper.findAndRegisterModules();
+
+        tagRules.addAll(Schema.TAG_RULES);
+        tagRules.add(new DesignatedDateAmountTagRule(DesignatedTransactions.getDesignatedTransactions()));
     }
+
+    private static final TransactionParser transactionParser = new WellsFargoTransactionParser();
+    private static final TagManager tagManager = new TagManager(tagRules);
+    private static final ImportManager importManager = new ImportManager(transactionParser, tagManager);
+
 
     public static void main(String[] args) {
         log.info("Hello and welcome!");
 
         try {
-            //importTransactions("data/Checking2.csv");
+            //importTransactions("data/Checking-021426.csv");
             //importTransactions("data/CreditCard4.csv");
 
             //reapplyTags(true /* replace */);
@@ -48,7 +57,8 @@ public class Main {
 
             reportMonthlyRollup(
                     List.of(
-                            YearMonth.of(2026, Month.JANUARY)
+                            YearMonth.of(2026, Month.JANUARY),
+                            YearMonth.of(2026, Month.FEBRUARY)
                     ),
                     Schema.getSpendingCategoryValues()
             );
@@ -85,6 +95,7 @@ public class Main {
         final List<TaggedTransaction> taggedTransactions = datastore.fetchTransactions();
         final MonthlyCategoryDataAccessor dataAccessor = new MonthlyCategoryDataAccessor(taggedTransactions, tagManager);
 
+        double total = 0.0;
         for (final YearMonth month : months) {
             log.info("=====================================================");
             log.info(month);
@@ -101,9 +112,12 @@ public class Main {
                 monthTotal += categoryTotal;
                 log.info("         Total: {}", categoryTotal);
             }
+            total += monthTotal;
             log.info("--------------------------------");
-            log.info("         Total: {}", monthTotal);
+            log.info("Total({}): {}", month, monthTotal);
         }
+        log.info("**********************************************");
+        log.info("         Total: {}", total);
     }
 
 }
