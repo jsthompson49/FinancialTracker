@@ -50,14 +50,10 @@ public class Main {
                     List.of(
                             YearMonth.of(2026, Month.JANUARY)
                     ),
-                    List.of(
-                            Schema.CATEGORY_UTILITIES.getValue(),
-                            Schema.CATEGORY_DONATION.getValue()
-                    )
+                    Schema.getSpendingCategoryValues()
             );
 
-            //datastore.storeTransactions(taggedTransactions);
-            //log.info("Successfully store transactions at {}", PATH_TO_TRANSACTIONS_JSON_DATASTORE);
+            log.info("Completed successfully");
         } catch (final Exception e) {
             log.error("Error in program", e);
         }
