@@ -49,11 +49,12 @@ public class Main {
 
         try {
             //importTransactions("data/Checking-021426.csv");
-            //importTransactions("data/CreditCard4.csv");
+            //importTransactions("data/CreditCard-021426.csv");
 
             //reapplyTags(true /* replace */);
 
-            listByTag(Schema.CATEGORY);
+            //listByTag(Schema.CATEGORY);
+            listUndefined(Schema.CATEGORY);
 
             reportMonthlyRollup(
                     List.of(
@@ -89,6 +90,17 @@ public class Main {
             log.info("Category: {}", entrySet.getKey());
             entrySet.getValue().forEach(taggedTransaction -> log.info("     {}", taggedTransaction));
         });
+    }
+
+    private static void listUndefined(final String tagName) {
+        final List<TaggedTransaction> taggedTransactions = datastore.fetchTransactions();
+
+        final List<TaggedTransaction> undefinedTagTransactions = taggedTransactions.stream()
+                .filter(taggedTransaction -> !tagManager.hasTag(taggedTransaction, Schema.CATEGORY))
+                .toList();
+
+        log.info("Undfined Category:");
+        undefinedTagTransactions.forEach(taggedTransaction -> log.info("{}", taggedTransaction));
     }
 
     private static void reportMonthlyRollup(final List<YearMonth> months, final List<String> categories) {

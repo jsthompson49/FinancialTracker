@@ -6,6 +6,7 @@ import com.maui.productivity.financial.model.TaggedTransaction;
 import com.maui.productivity.financial.model.Transaction;
 import lombok.RequiredArgsConstructor;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -28,6 +29,16 @@ public class TagManager {
         return transactions.stream()
                 .map(this::applyRules)
                 .toList();
+    }
+
+    public boolean hasTag(final TaggedTransaction taggedTransaction, String tagName) {
+        final Set<Tag> tags = taggedTransaction.getTags();
+        if (tags == null) {
+            return false;
+        }
+
+        return tags.stream()
+                .anyMatch(tag -> tagName.equals(tag.getName()));
     }
 
     public String getTagValue(final TaggedTransaction taggedTransaction, final String tagName) {
@@ -53,15 +64,17 @@ public class TagManager {
     }
 
     private Set<Tag> computeTags(final Transaction transaction) {
-        final Set<Tag> tags = new HashSet<>();
+        final HashMap<String, Tag> nameTagMap = new HashMap<>();
         tagRules.forEach(tagRule -> {
             final Set<Tag> ruleTags = tagRule.apply(transaction);
             if (ruleTags != null) {
-                tags.addAll(ruleTags);
+                for (final Tag tag : ruleTags) {
+                    nameTagMap.put(tag.getName(), tag);
+                }
             }
         });
 
-        return tags;
+        return nameTagMap.values().stream().collect(Collectors.toSet());
     }
 
     private Set<Tag> mergeTags(final Set<Tag> existingTags, final Set<Tag> newTags) {
