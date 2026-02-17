@@ -8,30 +8,30 @@ import java.util.List;
 public class Schema {
     public static final String CATEGORY = "Category";
 
-    private static final String ACCOUNT_TRANSFER = "AccountTransfer";
-    private static final String CAR = "Car";
-    private static final String CASH = "Cash";
-    //private static final String COLLEGE_AID = "CollegeAid";
-    private static final String DONATION = "Donation";
-    private static final String ENTERTAINMENT_EVENT = "EntertainmentEvent";
-    private static final String GROCERIES = "Groceries";
-    private static final String HOBBIES = "Hobbies";
-    private static final String HEALTH = "Health";
-    private static final String HOME = "Home";
-    private static final String INSURANCE = "Insurance";
-    private static final String INTEREST = "Interest";
-    private static final String MOVIES = "Movies";
-    private static final String MEDIA = "Media";
-    private static final String PETS = "Pets";
-    //private static final String REIMBURSEMENT = "Reimbursement";
-    private static final String RESTAURANTS = "Restaurants";
-    private static final String SERVICES = "Services";
-    private static final String SHOPPING = "Shopping";
-    private static final String STREAMING_SERVICE = "StreamingService";
-    private static final String TAXES = "Taxes";
-    private static final String TRAVEL = "Travel";
-    private static final String UTILITIES = "Utilities";
-    private static final String WAGES = "Wages";
+    public static final String ACCOUNT_TRANSFER = "AccountTransfer";
+    public static final String CAR = "Car";
+    public static final String CASH = "Cash";
+    //public static final String COLLEGE_AID = "CollegeAid";
+    public static final String DONATION = "Donation";
+    public static final String ENTERTAINMENT_EVENT = "EntertainmentEvent";
+    public static final String GROCERIES = "Groceries";
+    public static final String HOBBIES = "Hobbies";
+    public static final String HEALTH = "Health";
+    public static final String HOME = "Home";
+    public static final String INSURANCE = "Insurance";
+    public static final String INTEREST = "Interest";
+    public static final String MOVIES = "Movies";
+    public static final String MEDIA = "Media";
+    public static final String PETS = "Pets";
+    //public static final String REIMBURSEMENT = "Reimbursement";
+    public static final String RESTAURANTS = "Restaurants";
+    public static final String SERVICES = "Services";
+    public static final String SHOPPING = "Shopping";
+    public static final String STREAMING_SERVICE = "StreamingService";
+    public static final String TAXES = "Taxes";
+    public static final String TRAVEL = "Travel";
+    public static final String UTILITIES = "Utilities";
+    public static final String WAGES = "Wages";
 
     public static final Tag CATEGORY_ACCOUNT_TRANSFER = new Tag(CATEGORY, ACCOUNT_TRANSFER);
     public static final Tag CATEGORY_CAR = new Tag(CATEGORY, CAR);
@@ -192,30 +192,4 @@ public class Schema {
             new DescriptionPatternTagRule(".*(?i)(AMAZON.COM SVCS).*", CATEGORY_WAGES),
             new DescriptionPatternTagRule(".*(?i)(WELLS FARGO BANK PAYRLL DEP).*", CATEGORY_WAGES)
     );
-
-    public static List<String> getSpendingCategoryValues() {
-        return List.of(
-                CAR,
-                CASH,
-                //COLLEGE_AID,
-                DONATION,
-                ENTERTAINMENT_EVENT,
-                GROCERIES,
-                HEALTH,
-                HOBBIES,
-                HOME,
-                INSURANCE,
-                MEDIA,
-                MOVIES,
-                PETS,
-                //REIMBURSEMENT,
-                RESTAURANTS,
-                SERVICES,
-                SHOPPING,
-                STREAMING_SERVICE,
-                TAXES,
-                TRAVEL,
-                UTILITIES
-        );
-    }
 }
