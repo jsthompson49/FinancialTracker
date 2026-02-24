@@ -1,6 +1,7 @@
 package com.maui.productivity.financial.parser;
 
 import com.maui.productivity.financial.model.Transaction;
+import com.maui.productivity.financial.test.Artifacts;
 import org.junit.jupiter.api.Test;
 
 import java.io.StringReader;
@@ -12,14 +13,11 @@ public class WellsFargoTransactionParserTest {
 
     private final WellsFargoTransactionParser parser = new WellsFargoTransactionParser();
 
-    private static final String TEST_DATA = "\"01/29/2026\",\"-412.06\",\"*\",\"\",\"Desc #1\"\r\n"
-            + "\"01/28/2026\",\"-9017.34\",\"*\",\"\",\"Desc #2\"";
-
     @Test
     public void testParseSuccess() throws Exception {
-        final List<Transaction> transactions = parser.parse(new StringReader(TEST_DATA));
+        final List<Transaction> transactions = parser.parse(new StringReader(Artifacts.TEST_DATA_CSV));
 
-        assertThat(transactions.size()).isEqualTo(2);
+        assertThat(transactions).isEqualTo(Artifacts.TEST_DATA_TRANSACTIONS);
     }
 
     @Test
