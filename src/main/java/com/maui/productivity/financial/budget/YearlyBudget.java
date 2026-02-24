@@ -17,20 +17,20 @@ public class YearlyBudget {
         mapBuilder.put(Schema.CAR, 5_000.0);
         mapBuilder.put(Schema.CASH, 3_000.0);
         mapBuilder.put(Schema.DONATION, 2_000.0);
-        mapBuilder.put(Schema.ENTERTAINMENT_EVENT, 8_000.0);
-        mapBuilder.put(Schema.GROCERIES, 15_000.0);
+        mapBuilder.put(Schema.GROCERIES, 18_000.0);
         mapBuilder.put(Schema.HEALTH, 30_000.0);
-        mapBuilder.put(Schema.HOBBIES, 1_000.0);
+        mapBuilder.put(Schema.HOBBIES, 4_000.0);
         mapBuilder.put(Schema.HOME, 15_000.0);
+        mapBuilder.put(Schema.INCOME_TAX, 30_000.0);
         mapBuilder.put(Schema.INSURANCE, 4_500.0);
-        mapBuilder.put(Schema.MEDIA, 800.0);
-        mapBuilder.put(Schema.MOVIES, 500.0);
+        mapBuilder.put(Schema.MEDIA, 1500.0);
         mapBuilder.put(Schema.PETS, 8_000.0);
+        mapBuilder.put(Schema.PROPERTY_TAX, 6_000.0);
         mapBuilder.put(Schema.RESTAURANTS, 10_000.0);
         mapBuilder.put(Schema.SERVICES, 2_000.0);
-        mapBuilder.put(Schema.SHOPPING, 20_000.0);
-        mapBuilder.put(Schema.STREAMING_SERVICE, 500.0);
-        mapBuilder.put(Schema.TAXES, 20_000.0);
+        mapBuilder.put(Schema.SHOPPING, 15_000.0);
+        mapBuilder.put(Schema.SHOWS, 2_000.0);
+        mapBuilder.put(Schema.SPORTING_EVENT, 8_000.0);
         mapBuilder.put(Schema.TRAVEL, 50_000.0);
         mapBuilder.put(Schema.UTILITIES, 12_000.0);
     }
@@ -41,12 +41,16 @@ public class YearlyBudget {
         // Health
         expensesBuilder.remove(Schema.HEALTH);
 
+        // Taxes
+        expensesBuilder.remove(Schema.INCOME_TAX);
+
         // Travel
         expensesBuilder.remove(Schema.TRAVEL);
     }
 
     private static Map<String, Set<String>> MAJOR_CATEGORIES = Map.of(
             Schema.HEALTH, Set.of(Schema.HEALTH),
+            Schema.INCOME_TAX, Set.of(Schema.INCOME_TAX),
             Schema.TRAVEL, Set.of(Schema.TRAVEL),
             "Expenses", Set.copyOf(expensesBuilder)
     );

@@ -13,22 +13,22 @@ public class Schema {
     public static final String CASH = "Cash";
     //public static final String COLLEGE_AID = "CollegeAid";
     public static final String DONATION = "Donation";
-    public static final String ENTERTAINMENT_EVENT = "EntertainmentEvent";
     public static final String GROCERIES = "Groceries";
     public static final String HOBBIES = "Hobbies";
     public static final String HEALTH = "Health";
     public static final String HOME = "Home";
+    public static final String INCOME_TAX = "IncomeTax";
     public static final String INSURANCE = "Insurance";
     public static final String INTEREST = "Interest";
-    public static final String MOVIES = "Movies";
     public static final String MEDIA = "Media";
     public static final String PETS = "Pets";
+    public static final String PROPERTY_TAX = "PropertyTax";
     //public static final String REIMBURSEMENT = "Reimbursement";
     public static final String RESTAURANTS = "Restaurants";
     public static final String SERVICES = "Services";
     public static final String SHOPPING = "Shopping";
-    public static final String STREAMING_SERVICE = "StreamingService";
-    public static final String TAXES = "Taxes";
+    public static final String SHOWS = "Shows";
+    public static final String SPORTING_EVENT = "SportingEvent";
     public static final String TRAVEL = "Travel";
     public static final String UTILITIES = "Utilities";
     public static final String WAGES = "Wages";
@@ -38,22 +38,22 @@ public class Schema {
     public static final Tag CATEGORY_CASH = new Tag(CATEGORY, CASH);
     //public static final Tag CATEGORY_COLLEGE_AID = new Tag(CATEGORY, COLLEGE_AID);
     public static final Tag CATEGORY_DONATION = new Tag(CATEGORY, DONATION);
-    public static final Tag CATEGORY_ENTERTAINMENT_EVENT = new Tag(CATEGORY, ENTERTAINMENT_EVENT);
     public static final Tag CATEGORY_GROCERIES = new Tag(CATEGORY, GROCERIES);
     public static final Tag CATEGORY_HOBBIES = new Tag(CATEGORY, HOBBIES);
     public static final Tag CATEGORY_HEALTH = new Tag(CATEGORY, HEALTH);
     public static final Tag CATEGORY_HOME = new Tag(CATEGORY, HOME);
+    public static final Tag CATEGORY_INCOME_TAX = new Tag(CATEGORY, INCOME_TAX);
     public static final Tag CATEGORY_INSURANCE = new Tag(CATEGORY, INSURANCE);
     public static final Tag CATEGORY_INTEREST = new Tag(CATEGORY, INTEREST);
-    public static final Tag CATEGORY_MOVIES = new Tag(CATEGORY, MOVIES);
     public static final Tag CATEGORY_MEDIA = new Tag(CATEGORY, MEDIA);
     public static final Tag CATEGORY_PETS = new Tag(CATEGORY, PETS);
+    public static final Tag CATEGORY_PROPERTY_TAX = new Tag(CATEGORY, PROPERTY_TAX);
     //public static final Tag CATEGORY_REIMBURSEMENT = new Tag(CATEGORY, REIMBURSEMENT);
     public static final Tag CATEGORY_RESTAURANTS = new Tag(CATEGORY, RESTAURANTS);
     public static final Tag CATEGORY_SERVICES = new Tag(CATEGORY, SERVICES);
     public static final Tag CATEGORY_SHOPPING = new Tag(CATEGORY, SHOPPING);
-    public static final Tag CATEGORY_STREAMING_SERVICE = new Tag(CATEGORY, STREAMING_SERVICE);
-    public static final Tag CATEGORY_TAXES = new Tag(CATEGORY, TAXES);
+    public static final Tag CATEGORY_SHOWS = new Tag(CATEGORY, SHOWS);
+    public static final Tag CATEGORY_SPORTING_EVENT = new Tag(CATEGORY, SPORTING_EVENT);
     public static final Tag CATEGORY_TRAVEL = new Tag(CATEGORY, TRAVEL);
     public static final Tag CATEGORY_UTILITIES = new Tag(CATEGORY, UTILITIES);
     public static final Tag CATEGORY_WAGES = new Tag(CATEGORY, WAGES);
@@ -70,13 +70,6 @@ public class Schema {
             new DescriptionPatternTagRule(".*(?i)(C RAMP).*", CATEGORY_CAR),
             new DescriptionPatternTagRule(".*(?i)(CK HOLIDAY).*", CATEGORY_CAR),
             new DescriptionPatternTagRule(".*(?i)(HOLIDAY STATIONS).*", CATEGORY_CAR),
-
-            new DescriptionPatternTagRule(".*(?i)(MINNESOTA UNITED FC).*", CATEGORY_ENTERTAINMENT_EVENT),
-            new DescriptionPatternTagRule(".*(?i)(SeatGeek).*", CATEGORY_ENTERTAINMENT_EVENT),
-
-            new DescriptionPatternTagRule(".*(?i)(DISNEY PLUS).*", CATEGORY_STREAMING_SERVICE),
-            new DescriptionPatternTagRule(".*(?i)(NETFLIX).*", CATEGORY_STREAMING_SERVICE),
-            new DescriptionPatternTagRule(".*(?i)(PARAMOUNT).*", CATEGORY_STREAMING_SERVICE),
 
             new DescriptionPatternTagRule(".*(?i)(COSTCO WHSE).*", CATEGORY_GROCERIES),
             new DescriptionPatternTagRule(".*(?i)(CUB ).*", CATEGORY_GROCERIES),
@@ -107,6 +100,9 @@ public class Schema {
             new DescriptionPatternTagRule(".*(?i)(RING BASIC PLAN).*", CATEGORY_HOME),
             new DescriptionPatternTagRule(".*(?i)(SAFE BOX ANNUAL FEE).*", CATEGORY_HOME),
 
+            new DescriptionPatternTagRule(".*(?i)(IRS USATAXPYMT).*", CATEGORY_INCOME_TAX),
+            new DescriptionPatternTagRule(".*(?i)(MN DEPT OF REVEN).*", CATEGORY_INCOME_TAX),
+
             new DescriptionPatternTagRule(".*(?i)(STATE FARM).*", CATEGORY_INSURANCE),
 
             new DescriptionPatternTagRule(".*(?i)(Audible).*", CATEGORY_MEDIA),
@@ -115,9 +111,9 @@ public class Schema {
             new DescriptionPatternTagRule(".*(?i)(ONSTREET).*", CATEGORY_MEDIA),
             new DescriptionPatternTagRule(".*(?i)(SIRIUSXM).*", CATEGORY_MEDIA),
             new DescriptionPatternTagRule(".*(?i)(Spotify).*", CATEGORY_MEDIA),
-
-            new DescriptionPatternTagRule(".*(?i)(EMAGINE WHITE BEAR).*", CATEGORY_MOVIES),
-            new DescriptionPatternTagRule(".*(?i)(MARCUS OAKDALE CINE).*", CATEGORY_MOVIES),
+            new DescriptionPatternTagRule(".*(?i)(DISNEY PLUS).*", CATEGORY_MEDIA),
+            new DescriptionPatternTagRule(".*(?i)(NETFLIX).*", CATEGORY_MEDIA),
+            new DescriptionPatternTagRule(".*(?i)(PARAMOUNT).*", CATEGORY_MEDIA),
 
             new DescriptionPatternTagRule(".*(?i)(ANIMAL PERFECT HEALTH).*", CATEGORY_PETS),
             new DescriptionPatternTagRule(".*(?i)(CORE PET ZONE).*", CATEGORY_PETS),
@@ -152,6 +148,12 @@ public class Schema {
             new DescriptionPatternTagRule(".*(?i)(WALGREENS).*", CATEGORY_SHOPPING),
             new DescriptionPatternTagRule(".*(?i)(FLOWER SHOP NETWORK).*", CATEGORY_SHOPPING),
 
+            new DescriptionPatternTagRule(".*(?i)(EMAGINE WHITE BEAR).*", CATEGORY_SHOWS),
+            new DescriptionPatternTagRule(".*(?i)(MARCUS OAKDALE CINE).*", CATEGORY_SHOWS),
+
+            new DescriptionPatternTagRule(".*(?i)(MINNESOTA UNITED FC).*", CATEGORY_SPORTING_EVENT),
+            new DescriptionPatternTagRule(".*(?i)(SeatGeek).*", CATEGORY_SPORTING_EVENT),
+
             new DescriptionPatternTagRule(".*(?i)(BELLAGIO BOX OFFICE).*", CATEGORY_TRAVEL),
             new DescriptionPatternTagRule(".*(?i)(ARIA).*", CATEGORY_TRAVEL),
             new DescriptionPatternTagRule(".*(?i)(COCINA DEL BARRIO).*", CATEGORY_TRAVEL),
@@ -174,9 +176,6 @@ public class Schema {
             new DescriptionPatternTagRule(".*(?i)(THUNDERLAND SHOWROOM).*", CATEGORY_TRAVEL),
 
             //new DescriptionPatternTagRule(".*(?i)(ONLINE TRANSFER TO THOMPSON S).*", CATEGORY_COLLEGE_AID),
-
-            new DescriptionPatternTagRule(".*(?i)(IRS USATAXPYMT).*", CATEGORY_TAXES),
-            new DescriptionPatternTagRule(".*(?i)(MN DEPT OF REVEN).*", CATEGORY_TAXES),
 
             new DescriptionPatternTagRule(".*(?i)(ACESOLIDWASTE).*", CATEGORY_UTILITIES),
             new DescriptionPatternTagRule(".*(?i)(CITY OF SHOREVIE UTILITIES).*", CATEGORY_UTILITIES),
