@@ -37,7 +37,7 @@ public class JsonFileTransactionStore implements TransactionStore {
     @Override
     public void storeTransactions(List<TaggedTransaction> transactions, final boolean append) {
         try {
-            final List<TaggedTransaction> transactionsToWrite = append ? fetchTransactions() : new ArrayList<>();
+            final List<TaggedTransaction> transactionsToWrite = append ? new ArrayList<>(fetchTransactions()) : new ArrayList<>();
             transactionsToWrite.addAll(transactions);
 
             final List<TaggedTransaction> sortedTransactions = transactionsToWrite.stream()
