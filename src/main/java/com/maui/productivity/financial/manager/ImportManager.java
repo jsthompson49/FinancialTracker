@@ -19,17 +19,29 @@ public class ImportManager {
     private final TransactionParser transactionParser;
     private final TagManager tagManager;
 
+    public List<TaggedTransaction> importTransactionsDryrun(final String pathToFile,
+                                                            final TransactionStore transactionStore,
+                                                            final boolean removeDuplicates) {
+        return parseAndTagTransactions(pathToFile, transactionStore, removeDuplicates);
+    }
+
     public void importTransactions(final String pathToFile, final TransactionStore transactionStore, final boolean removeDuplicates) {
+        final List<TaggedTransaction> newTaggedTransactions = parseAndTagTransactions(pathToFile, transactionStore, removeDuplicates);
+
+        transactionStore.storeTransactions(newTaggedTransactions, true /* append */);
+        log.info("Appended {} new transactions", newTaggedTransactions.size());
+    }
+
+    private List<TaggedTransaction> parseAndTagTransactions(final String pathToFile,
+                                                            final TransactionStore transactionStore,
+                                                            final boolean removeDuplicates) {
         try {
             final List<Transaction> parsedTransactions = transactionParser.parse(new FileReader(pathToFile));
 
             final List<Transaction> newTransactions = removeDuplicates ? removeDuplicates(parsedTransactions, transactionStore) : parsedTransactions;
             log.info("Import transactions: parsed={} new={}", parsedTransactions.size(), newTransactions.size());
 
-            final List<TaggedTransaction> newTaggedTransactions = tagManager.tagTransactions(newTransactions);
-
-            transactionStore.storeTransactions(newTaggedTransactions, true /* append */);
-            log.info("Appended {} new transactions", newTaggedTransactions.size());
+            return tagManager.tagTransactions(newTransactions);
         } catch (final IOException ioException) {
             throw new RuntimeException(ioException);
         }

@@ -47,30 +47,41 @@ public class Main {
     public static void main(String[] args) {
         log.info("Hello and welcome!");
 
+        final boolean dryrun = false;
         final boolean report = true;
 
         try {
-            //importTransactions("data/Checking-021426.csv");
-            //importTransactions("data/CreditCard-021426.csv");
-
-            //reapplyTags(true /* replace */);
-
-            if (report) {
-                final List<TaggedTransaction> taggedTransactions = datastore.fetchTransactions();
+            if (dryrun) {
+                final String pathToImportFile = "data/Checking-021426.csv";
+                final boolean removeDuplicates = false;
+                final List<TaggedTransaction> taggedTransactions =
+                        importManager.importTransactionsDryrun(pathToImportFile, datastore, removeDuplicates);
 
                 reportManager.listByTag(Schema.CATEGORY, taggedTransactions);
                 reportManager.listUndefined(taggedTransactions);
+            } else {
+                //importTransactions("data/Checking-021426.csv");
+                //importTransactions("data/CreditCard-021426.csv");
 
-                final List<YearMonth> months = List.of(
-                        YearMonth.of(2026, Month.JANUARY),
-                        YearMonth.of(2026, Month.FEBRUARY)
-                );
+                //reapplyTags(true /* replace */);
 
-                reportManager.reportMonthlyRollup(months, yearlyBudget.getAllCatgories(), taggedTransactions);
+                if (report) {
+                    final List<TaggedTransaction> taggedTransactions = datastore.fetchTransactions();
 
-                reportManager.reportYearlyRollup(List.of(Year.of(2026)), yearlyBudget.getAllCatgories(), taggedTransactions);
+                    reportManager.listByTag(Schema.CATEGORY, taggedTransactions);
+                    reportManager.listUndefined(taggedTransactions);
 
-                reportManager.reportYearlyBudgetProgress(Year.of(2026), yearlyBudget, taggedTransactions);
+                    final List<YearMonth> months = List.of(
+                            YearMonth.of(2026, Month.JANUARY),
+                            YearMonth.of(2026, Month.FEBRUARY)
+                    );
+
+                    reportManager.reportMonthlyRollup(months, yearlyBudget.getAllCatgories(), taggedTransactions);
+
+                    reportManager.reportYearlyRollup(List.of(Year.of(2026)), yearlyBudget.getAllCatgories(), taggedTransactions);
+
+                    reportManager.reportYearlyBudgetProgress(Year.of(2026), yearlyBudget, taggedTransactions);
+                }
             }
 
             log.info("Completed successfully");

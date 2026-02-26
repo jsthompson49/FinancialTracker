@@ -18,8 +18,7 @@ import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class ImportManagerTest {
 
@@ -36,6 +35,22 @@ public class ImportManagerTest {
         MockitoAnnotations.openMocks(this);
 
         importManager = new ImportManager(transactionParser, tagManager);
+    }
+
+    @Test
+    public void testImportTransactionsDryrunKeepDuplicatesSuccess() throws Exception {
+        when(transactionParser.parse(any(FileReader.class))).thenReturn(Artifacts.TEST_IMPORT_TRANSACTIONS);
+
+        when(transactionStore.fetchTransactions()).thenReturn(Artifacts.buildTaggedTransactions(Artifacts.TEST_DATE_SORTED_COMBINED_TRANSACTIONS));
+
+        final List<TaggedTransaction> expectedTransactions = Artifacts.buildTaggedTransactions(Artifacts.TEST_IMPORT_TRANSACTIONS);
+        when(tagManager.tagTransactions(Artifacts.TEST_IMPORT_TRANSACTIONS)).thenReturn(expectedTransactions);
+
+        final List<TaggedTransaction> dryrunTransactions =
+                importManager.importTransactionsDryrun(ANY_PATH_TO_IMPORT_FILE, transactionStore, false);
+
+        assertThat(dryrunTransactions).isEqualTo(expectedTransactions);
+        verify(transactionStore, never()).storeTransactions(any(), anyBoolean());
     }
 
     @Test
