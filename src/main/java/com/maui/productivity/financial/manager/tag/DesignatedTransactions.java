@@ -13,11 +13,19 @@ public class DesignatedTransactions {
             new DateAmountForTags(-372.0, LocalDate.of(2026, Month.JANUARY, 5), Set.of(Schema.CATEGORY_TRAVEL)),
             new DateAmountForTags(-1628.79, LocalDate.of(2026, Month.JANUARY, 19), Set.of(Schema.CATEGORY_HEALTH)),
 
-            new DateAmountForTags(960.0, LocalDate.of(2026, Month.FEBRUARY, 10), Set.of(Schema.CATEGORY_HEALTH))
-            //new DateAmountForTags(1952.76, LocalDate.of(2026, Month.FEBRUARY, 10), Set.of(Schema.CATEGORY_REIMBURSEMENT))
+            new DateAmountForTags(960.0, LocalDate.of(2026, Month.FEBRUARY, 10), Set.of(Schema.CATEGORY_HEALTH)),
+            new DateAmountForTags(1952.76, LocalDate.of(2026, Month.FEBRUARY, 10), Set.of(Schema.CATEGORY_TRAVEL))
+    );
+
+    private static final List<CheckTagRule> CHECK_TAG_RULES = List.of(
+            new CheckTagRule("4620", Set.of(Schema.CATEGORY_INCOME_TAX))
     );
 
     public static List<DateAmountForTags> getDesignatedTransactions() {
         return DESIGNATED_TRANSACTIONS;
+    }
+
+    public static final List<CheckTagRule> getCheckTagRules() {
+        return CHECK_TAG_RULES;
     }
 }

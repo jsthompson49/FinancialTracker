@@ -13,6 +13,7 @@ public class Schema {
     public static final String CASH = "Cash";
     //public static final String COLLEGE_AID = "CollegeAid";
     public static final String DONATION = "Donation";
+    public static final String GIFT = "Gift";
     public static final String GROCERIES = "Groceries";
     public static final String HOBBIES = "Hobbies";
     public static final String HEALTH = "Health";
@@ -23,7 +24,6 @@ public class Schema {
     public static final String MEDIA = "Media";
     public static final String PETS = "Pets";
     public static final String PROPERTY_TAX = "PropertyTax";
-    //public static final String REIMBURSEMENT = "Reimbursement";
     public static final String RESTAURANTS = "Restaurants";
     public static final String SERVICES = "Services";
     public static final String SHOPPING = "Shopping";
@@ -38,6 +38,7 @@ public class Schema {
     public static final Tag CATEGORY_CASH = new Tag(CATEGORY, CASH);
     //public static final Tag CATEGORY_COLLEGE_AID = new Tag(CATEGORY, COLLEGE_AID);
     public static final Tag CATEGORY_DONATION = new Tag(CATEGORY, DONATION);
+    public static final Tag CATEGORY_GIFT = new Tag(CATEGORY, GIFT);
     public static final Tag CATEGORY_GROCERIES = new Tag(CATEGORY, GROCERIES);
     public static final Tag CATEGORY_HOBBIES = new Tag(CATEGORY, HOBBIES);
     public static final Tag CATEGORY_HEALTH = new Tag(CATEGORY, HEALTH);
@@ -48,7 +49,6 @@ public class Schema {
     public static final Tag CATEGORY_MEDIA = new Tag(CATEGORY, MEDIA);
     public static final Tag CATEGORY_PETS = new Tag(CATEGORY, PETS);
     public static final Tag CATEGORY_PROPERTY_TAX = new Tag(CATEGORY, PROPERTY_TAX);
-    //public static final Tag CATEGORY_REIMBURSEMENT = new Tag(CATEGORY, REIMBURSEMENT);
     public static final Tag CATEGORY_RESTAURANTS = new Tag(CATEGORY, RESTAURANTS);
     public static final Tag CATEGORY_SERVICES = new Tag(CATEGORY, SERVICES);
     public static final Tag CATEGORY_SHOPPING = new Tag(CATEGORY, SHOPPING);
