@@ -29,9 +29,16 @@ public class Artifacts {
     private static final String DESC_A = "Desc #A";
     private static final String DESC_B = "Desc #B";
 
-    public static final Tag TAG_A_1 = new Tag("NameA", "AValue1");
-    public static final Tag TAG_A_2 = new Tag("NameA", "AValue2");
-    public static final Tag TAG_B_1 = new Tag("NameB", "BValue1");
+    public static final String TAG_NAME_A = "NameA";
+    public static final String TAG_NAME_B = "NameB";
+    public static final String TAG_NAME_C = "NameC";
+
+    public static final String TAG_VALUE_A_1 = "AValue1";
+    public static final String TAG_VALUE_B_1 = "BValue1";
+
+    public static final Tag TAG_A_1 = new Tag(TAG_NAME_A, TAG_VALUE_A_1);
+    public static final Tag TAG_A_2 = new Tag(TAG_NAME_A, "AValue2");
+    public static final Tag TAG_B_1 = new Tag(TAG_NAME_B, TAG_VALUE_B_1);
 
     public static final String TEST_DATA_CSV = "\"01/29/2026\",\"-412.06\",\"*\",\"\",\"Desc #1\"\r\n"
             + "\"02/28/2026\",\"-9017.34\",\"*\",\"\",\"Desc #2\"";
