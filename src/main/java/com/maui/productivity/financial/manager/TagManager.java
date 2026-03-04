@@ -16,7 +16,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class TagManager {
 
-    private static final String UNDEFINED_TAG_NAME = "<Undefined>";
+    private static final String UNDEFINED_TAG_VALUE = "<Undefined>";
+
     private final List<TagRule> tagRules;
 
     public List<TaggedTransaction> tagTransactions(final List<TaggedTransaction> transactions, final boolean replace) {
@@ -48,7 +49,7 @@ public class TagManager {
                 .filter(tag -> tagName.equals(tag.getName()))
                 .findAny()
                 .map(Tag::getValue)
-                .orElse(UNDEFINED_TAG_NAME);
+                .orElse(UNDEFINED_TAG_VALUE);
     }
 
     private TaggedTransaction applyRules(final TaggedTransaction transaction, final boolean replace) {

@@ -14,7 +14,7 @@ public class YearlyBudget {
 
     private static final HashMap<String, Double> mapBuilder = new HashMap<>();
     static {
-        mapBuilder.put(Schema.CAR, 5_000.0);
+        mapBuilder.put(Schema.CAR, 4_000.0);
         mapBuilder.put(Schema.CASH, 2_000.0);
         mapBuilder.put(Schema.DONATION, 2_000.0);
         mapBuilder.put(Schema.GIFT, 10_000.0);
@@ -23,8 +23,8 @@ public class YearlyBudget {
         mapBuilder.put(Schema.HOBBIES, 3_000.0);
         mapBuilder.put(Schema.HOME, 15_000.0);
         mapBuilder.put(Schema.INCOME_TAX, 24_000.0);
-        mapBuilder.put(Schema.INSURANCE, 4_500.0);
-        mapBuilder.put(Schema.MEDIA, 1_500.0);
+        mapBuilder.put(Schema.INSURANCE, 5_000.0);
+        mapBuilder.put(Schema.MEDIA, 2_000.0);
         mapBuilder.put(Schema.PETS, 8_000.0);
         mapBuilder.put(Schema.PROPERTY_TAX, 8_000.0);
         mapBuilder.put(Schema.RESTAURANTS, 18_000.0);

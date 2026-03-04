@@ -48,20 +48,25 @@ public class Main {
         log.info("Hello and welcome!");
 
         final boolean dryrun = false;
+        final boolean importTransactions = false;
         final boolean report = true;
+
+        //final String pathToImportFile = "data/Checking-030126.csv";
+        //final String pathToImportFile = "data/CreditCardSecondary-030126.csv";
+        final String pathToImportFile = "data/CreditCard-030426.csv";
 
         try {
             if (dryrun) {
-                final String pathToImportFile = "data/Checking-021426.csv";
-                final boolean removeDuplicates = false;
+                final boolean removeDuplicates = true;
                 final List<TaggedTransaction> taggedTransactions =
                         importManager.importTransactionsDryrun(pathToImportFile, datastore, removeDuplicates);
 
                 reportManager.listByTag(Schema.CATEGORY, taggedTransactions);
                 reportManager.listUndefined(taggedTransactions);
             } else {
-                //importTransactions("data/Checking-021426.csv");
-                //importTransactions("data/CreditCard-021426.csv");
+                if (importTransactions) {
+                    importTransactions(pathToImportFile);
+                }
 
                 //reapplyTags(true /* replace */);
 
