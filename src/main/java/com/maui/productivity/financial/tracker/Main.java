@@ -14,6 +14,7 @@ import com.maui.productivity.financial.model.TagRule;
 import com.maui.productivity.financial.model.TaggedTransaction;
 import com.maui.productivity.financial.parser.TransactionParser;
 import com.maui.productivity.financial.parser.WellsFargoTransactionParser;
+import com.maui.productivity.financial.report.HtmlReportGenerator;
 import lombok.extern.log4j.Log4j2;
 
 import java.time.Month;
@@ -42,7 +43,8 @@ public class Main {
     private static final TagManager tagManager = new TagManager(tagRules);
     private static final ImportManager importManager = new ImportManager(transactionParser, tagManager);
     private static final YearlyBudget yearlyBudget = new YearlyBudget();
-    private static final ReportManager reportManager = new ReportManager(tagManager);
+    private static final HtmlReportGenerator reportGenerator = new HtmlReportGenerator();
+    private static final ReportManager reportManager = new ReportManager(tagManager, reportGenerator);
 
     public static void main(String[] args) {
         log.info("Hello and welcome!");

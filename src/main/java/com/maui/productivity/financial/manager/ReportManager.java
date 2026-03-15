@@ -4,9 +4,12 @@ import com.maui.productivity.financial.budget.YearlyBudget;
 import com.maui.productivity.financial.manager.tag.Schema;
 import com.maui.productivity.financial.model.TaggedTransaction;
 import com.maui.productivity.financial.model.Transaction;
+import com.maui.productivity.financial.report.HtmlReportGenerator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.time.LocalDate;
@@ -23,13 +26,14 @@ import java.util.stream.Collectors;
 public class ReportManager {
 
     private static final NumberFormat PERCENT_FORMAT = NumberFormat.getPercentInstance(Locale.US);
-    private static final NumberFormat CURRENCY_FORMAT = NumberFormat.getCurrencyInstance(Locale.US);
+    public static final NumberFormat CURRENCY_FORMAT = NumberFormat.getCurrencyInstance(Locale.US);
 
     static {
         PERCENT_FORMAT.setMaximumFractionDigits(2);
     }
 
     private final TagManager tagManager;
+    private final HtmlReportGenerator reportGenerator;
 
     public void listByTag(final String tagName, final List<TaggedTransaction> taggedTransactions) {
         final Map<String, List<TaggedTransaction>> tagValueTransactions = taggedTransactions.stream()
@@ -53,57 +57,15 @@ public class ReportManager {
     public void reportMonthlyRollup(final List<YearMonth> months, final Set<String> categories, final List<TaggedTransaction> taggedTransactions) {
         final MonthlyCategoryDataAccessor dataAccessor = new MonthlyCategoryDataAccessor(taggedTransactions, tagManager);
 
-        double total = 0.0;
-        for (final YearMonth month : months) {
-            log.info("=====================================================");
-            log.info(month);
-            double monthTotal = 0.0;
-            for (final String category : categories) {
-                log.info("*** {}", category);
-                final List<TaggedTransaction> transactions = dataAccessor.getTransactions(month, category);
-                double categoryTotal = 0.0;
-                for (final TaggedTransaction taggedTransaction : transactions) {
-                    final Transaction transaction = taggedTransaction.getTransaction();
-                    categoryTotal += transaction.getAmount();
-                    log.info("    {}: {} - {}", transaction.getDate(), CURRENCY_FORMAT.format(transaction.getAmount()), transaction.getDescription());
-                }
-                monthTotal += categoryTotal;
-                log.info("         Total: {}", CURRENCY_FORMAT.format(categoryTotal));
-            }
-            total += monthTotal;
-            log.info("--------------------------------");
-            log.info("Total({}): {}", month, CURRENCY_FORMAT.format(monthTotal));
-        }
-        log.info("**********************************************");
-        log.info("         Total: {}", CURRENCY_FORMAT.format(total));
+        final String html = reportGenerator.reportRollup(months, dataAccessor, categories);
+        writeFile(html, "./target/reports/monthlyRollup.html");
     }
 
     public void reportYearlyRollup(final List<Year> years, final Set<String> categories, final List<TaggedTransaction> taggedTransactions) {
         final YearlyCategoryDataAccessor dataAccessor = new YearlyCategoryDataAccessor(taggedTransactions, tagManager);
 
-        double total = 0.0;
-        for (final Year year : years) {
-            log.info("=====================================================");
-            log.info(year);
-            double yearTotal = 0.0;
-            for (final String category : categories) {
-                log.info("*** {}", category);
-                final List<TaggedTransaction> transactions = dataAccessor.getTransactions(year, category);
-                double categoryTotal = 0.0;
-                for (final TaggedTransaction taggedTransaction : transactions) {
-                    final Transaction transaction = taggedTransaction.getTransaction();
-                    categoryTotal += transaction.getAmount();
-                    log.info("    {}: {} - {}", transaction.getDate(), CURRENCY_FORMAT.format(transaction.getAmount()), transaction.getDescription());
-                }
-                yearTotal += categoryTotal;
-                log.info("         Total: {}", CURRENCY_FORMAT.format(categoryTotal));
-            }
-            total += yearTotal;
-            log.info("--------------------------------");
-            log.info("Total({}): {}", year, CURRENCY_FORMAT.format(yearTotal));
-        }
-        log.info("**********************************************");
-        log.info("         Total: {}", CURRENCY_FORMAT.format(total));
+        final String html = reportGenerator.reportRollup(years, dataAccessor, categories);
+        writeFile(html, "./target/reports/yearlyRollup.html");
     }
 
     public void reportYearlyBudgetProgress(final Year year, final YearlyBudget yearlyBudget, final List<TaggedTransaction> taggedTransactions) {
@@ -157,6 +119,16 @@ public class ReportManager {
         log.info(MESSAGE_FORMAT, year, CURRENCY_FORMAT.format(-total),
                 CURRENCY_FORMAT.format(budgetTotal), PERCENT_FORMAT.format(-total / budgetTotal),
                 CURRENCY_FORMAT.format(ytdBudgetTotal), PERCENT_FORMAT.format(-total / ytdBudgetTotal));
+    }
+
+    private void writeFile(final String content, final String pathToFile) {
+        try {
+            final FileWriter writer = new FileWriter(pathToFile);
+            writer.write(content);
+            writer.close();
+        } catch (final IOException ioException) {
+            throw new RuntimeException(ioException);
+        }
     }
 }
 
