@@ -3,6 +3,8 @@ package com.maui.productivity.financial.report;
 import com.maui.productivity.financial.model.DataAccessor;
 import com.maui.productivity.financial.model.TaggedTransaction;
 import com.maui.productivity.financial.model.Transaction;
+import j2html.tags.DomContent;
+import j2html.tags.DomContentJoiner;
 import j2html.tags.specialized.TableTag;
 import lombok.extern.log4j.Log4j2;
 
@@ -16,6 +18,8 @@ import static com.maui.productivity.financial.manager.ReportManager.CURRENCY_FOR
 import static j2html.TagCreator.b;
 import static j2html.TagCreator.body;
 import static j2html.TagCreator.each;
+import static j2html.TagCreator.h1;
+import static j2html.TagCreator.h2;
 import static j2html.TagCreator.h3;
 import static j2html.TagCreator.html;
 import static j2html.TagCreator.style;
@@ -24,6 +28,7 @@ import static j2html.TagCreator.tbody;
 import static j2html.TagCreator.td;
 import static j2html.TagCreator.th;
 import static j2html.TagCreator.thead;
+import static j2html.TagCreator.title;
 import static j2html.TagCreator.tr;
 
 @Log4j2
@@ -61,7 +66,7 @@ public class HtmlReportGenerator {
             log.info("Total({}): {}", period, currencyPeriodTotal);
             dataRows.add(List.of(String.format("Total(%s)", period), currencyPeriodTotal));
 
-            final TableTag periodTable = table(period.toString()).with(
+            final TableTag periodTable = table().with(
                     thead(
                             tr(
                                     th("Date"),
@@ -87,18 +92,60 @@ public class HtmlReportGenerator {
 
         final String currencyTotal = CURRENCY_FORMAT.format(total);
         log.info("         Total: {}", currencyTotal);
+
+        final String title = (periods.size() == 1)
+                ? "Rollup " + periods.getFirst().toString()
+                : String.format("Rollup %s to %s", periods.getFirst(), periods.getLast());
+        final List<DomContent> bodyContent = new ArrayList<>();
+        periodTables.entrySet().forEach(entry -> {
+            bodyContent.add(h2(entry.getKey()));
+            bodyContent.add(entry.getValue());
+        });
+        bodyContent.add(h3("Overall Total = " + currencyTotal));
+
+        return render(title, bodyContent);
+    }
+
+    public <P, A extends DataAccessor<P>> String reportBudgetProgress(final String title, final List<List<String>> dataRows) {
+        final TableTag table = table().with(
+                thead(
+                        tr(
+                                th("Category"),
+                                th("Acutal"),
+                                th( "Budget"),
+                                th( "Budget %"),
+                                th( "YTD Budget"),
+                                th( "YTD Budget %")
+                        )
+                ),
+                tbody(
+                        each(dataRows, row -> {
+                            if (row.size() <= 1) {
+                                final String text = row.size() == 0 ? "" : row.get(0);
+                                return tr(td(b(text)).attr("colspan", "5"));
+                            }
+
+                            return tr(
+                                    each( row, item -> td(item).withClass(RIGHT_ALIGN)));
+                        })
+                )
+        );
+
+        return render(title, List.of(table));
+    }
+
+    private String render(final String title, final List<DomContent> bodyContent) {
         return html(
                 style(
                         "table, th, td {" +
-                                    "border: 1px solid black;" +
+                                "border: 1px solid black;" +
                                 "}" +
-                        ".right-align {" +
-                        "            text-align: right;\n" +
-                        "        }"),
-                body(
-                        each(periodTables.values(), pt -> pt),
-                        h3("Overall Total = " + currencyTotal)
-                )
+                                ".right-align {" +
+                                "            text-align: right;\n" +
+                                "        }"),
+                title(title),
+                body(h1(title), each(bodyContent.stream()))
         ).renderFormatted();
     }
+
 }

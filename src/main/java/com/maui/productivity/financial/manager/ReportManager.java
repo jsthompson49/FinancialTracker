@@ -15,6 +15,7 @@ import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.Year;
 import java.time.YearMonth;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -79,6 +80,7 @@ public class ReportManager {
 
         final Map<String, Set<String>> budgetCategories = yearlyBudget.getCategories(year);
         final Map<String, Double> budget = yearlyBudget.getAmounts(year);
+        final List<List<String>> dataRows = new ArrayList<>();
 
         final String MESSAGE_FORMAT = "{}: actual={} budget={}({}) YTD-budget={}({})";
         double total = 0.0;
@@ -86,10 +88,10 @@ public class ReportManager {
         for (final String majorCategory : budgetCategories.keySet()) {
             log.info("=====================================================");
             log.info(majorCategory);
+            dataRows.add(List.of(majorCategory));
             double majorCategoryTotal = 0.0;
             double budgetMajorCategoryTotal = 0.0;
             for (final String category : budgetCategories.get(majorCategory)) {
-                log.info("*** {}", category);
                 final List<TaggedTransaction> transactions = dataAccessor.getTransactions(year, category);
                 final double categoryTotal = transactions.stream()
                         .map(TaggedTransaction::getTransaction)
@@ -104,21 +106,35 @@ public class ReportManager {
                 log.info("  " + MESSAGE_FORMAT, category, CURRENCY_FORMAT.format(-categoryTotal),
                         CURRENCY_FORMAT.format(budgetCategoryTotal), PERCENT_FORMAT.format(-categoryTotal / budgetCategoryTotal),
                         CURRENCY_FORMAT.format(ytdBudgetCategoryTotal), PERCENT_FORMAT.format(-categoryTotal / ytdBudgetCategoryTotal));
+                dataRows.add(List.of(category, CURRENCY_FORMAT.format(-categoryTotal),
+                        CURRENCY_FORMAT.format(budgetCategoryTotal), PERCENT_FORMAT.format(-categoryTotal / budgetCategoryTotal),
+                        CURRENCY_FORMAT.format(ytdBudgetCategoryTotal), PERCENT_FORMAT.format(-categoryTotal / ytdBudgetCategoryTotal)));
             }
             total += majorCategoryTotal;
             budgetTotal += budgetMajorCategoryTotal;
 
-            log.info("--------------------------------");
             final double ytdBudgetMajorCategoryTotal = budgetMajorCategoryTotal * yearDayRatio;
             log.info(MESSAGE_FORMAT, majorCategory, CURRENCY_FORMAT.format(-majorCategoryTotal),
                     CURRENCY_FORMAT.format(budgetMajorCategoryTotal), PERCENT_FORMAT.format(-majorCategoryTotal / budgetMajorCategoryTotal),
                     CURRENCY_FORMAT.format(ytdBudgetMajorCategoryTotal), PERCENT_FORMAT.format(-majorCategoryTotal / ytdBudgetMajorCategoryTotal));
+            dataRows.add(List.of());
+            dataRows.add(List.of("Total", CURRENCY_FORMAT.format(-majorCategoryTotal),
+                    CURRENCY_FORMAT.format(budgetMajorCategoryTotal), PERCENT_FORMAT.format(-majorCategoryTotal / budgetMajorCategoryTotal),
+                    CURRENCY_FORMAT.format(ytdBudgetMajorCategoryTotal), PERCENT_FORMAT.format(-majorCategoryTotal / ytdBudgetMajorCategoryTotal)));
         }
         log.info("**********************************************");
         final double ytdBudgetTotal = budgetTotal * yearDayRatio;
         log.info(MESSAGE_FORMAT, year, CURRENCY_FORMAT.format(-total),
                 CURRENCY_FORMAT.format(budgetTotal), PERCENT_FORMAT.format(-total / budgetTotal),
                 CURRENCY_FORMAT.format(ytdBudgetTotal), PERCENT_FORMAT.format(-total / ytdBudgetTotal));
+        dataRows.add(List.of());
+        dataRows.add(List.of());
+        dataRows.add(List.of("Total - " + year, CURRENCY_FORMAT.format(-total),
+                CURRENCY_FORMAT.format(budgetTotal), PERCENT_FORMAT.format(-total / budgetTotal),
+                CURRENCY_FORMAT.format(ytdBudgetTotal), PERCENT_FORMAT.format(-total / ytdBudgetTotal)));
+
+        final String html = reportGenerator.reportBudgetProgress("Budget Progress - " + year, dataRows);
+        writeFile(html, "./target/reports/budgetProgress.html");
     }
 
     private void writeFile(final String content, final String pathToFile) {
