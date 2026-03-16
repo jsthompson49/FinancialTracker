@@ -11,6 +11,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -20,9 +21,18 @@ public class TagManager {
 
     private final List<TagRule> tagRules;
 
-    public List<TaggedTransaction> tagTransactions(final List<TaggedTransaction> transactions, final boolean replace) {
+    public List<TaggedTransaction> tagTransactions(final List<TaggedTransaction> transactions,
+                                                   final boolean replaceTags) {
+        return tagTransactions(transactions, replaceTags, taggedTransaction -> true);
+    }
+
+    public List<TaggedTransaction> tagTransactions(final List<TaggedTransaction> transactions,
+                                                   final boolean replaceTags,
+                                                   final Predicate<TaggedTransaction> applyFilter) {
         return transactions.stream()
-                .map(taggedTransaction -> applyRules(taggedTransaction, replace))
+                .map(taggedTransaction -> applyFilter.test(taggedTransaction)
+                        ? applyRules(taggedTransaction, replaceTags)
+                        : taggedTransaction)
                 .toList();
     }
 

@@ -7,6 +7,7 @@ import com.maui.productivity.financial.datastore.TransactionStore;
 import com.maui.productivity.financial.manager.ImportManager;
 import com.maui.productivity.financial.manager.ReportManager;
 import com.maui.productivity.financial.manager.TagManager;
+import com.maui.productivity.financial.manager.TransactionFilters;
 import com.maui.productivity.financial.manager.tag.DesignatedDateAmountTagRule;
 import com.maui.productivity.financial.manager.tag.DesignatedTransactions;
 import com.maui.productivity.financial.manager.tag.Schema;
@@ -17,11 +18,13 @@ import com.maui.productivity.financial.parser.WellsFargoTransactionParser;
 import com.maui.productivity.financial.report.HtmlReportGenerator;
 import lombok.extern.log4j.Log4j2;
 
+import java.time.LocalDate;
 import java.time.Month;
 import java.time.Year;
 import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 @Log4j2
 public class Main {
@@ -52,6 +55,8 @@ public class Main {
         final boolean dryrun = false;
         final boolean importTransactions = false;
         final boolean report = true;
+        //final Predicate<TaggedTransaction> reapplyFilter = TransactionFilters.getFilter(TransactionFilters.getDateOnFilter(LocalDate.of(2026, 2, 23)));
+        final Predicate<TaggedTransaction> reapplyFilter = null;
 
         //final String pathToImportFile = "data/Checking-030126.csv";
         //final String pathToImportFile = "data/CreditCardSecondary-030126.csv";
@@ -70,7 +75,9 @@ public class Main {
                     importTransactions(pathToImportFile);
                 }
 
-                //reapplyTags(true /* replace */);
+                if (reapplyFilter != null) {
+                    reapplyTags(true /* replace */, reapplyFilter);
+                }
 
                 if (report) {
                     final List<TaggedTransaction> taggedTransactions = datastore.fetchTransactions();
@@ -101,9 +108,9 @@ public class Main {
         importManager.importTransactions(pathToFile, datastore, true);
     }
 
-    private static void reapplyTags(final boolean replace) {
+    private static void reapplyTags(final boolean replaceTags, final Predicate<TaggedTransaction> applyFilter) {
         final List<TaggedTransaction> transactions = datastore.fetchTransactions();
-        final List<TaggedTransaction> newTransactions = tagManager.tagTransactions(transactions, replace);
+        final List<TaggedTransaction> newTransactions = tagManager.tagTransactions(transactions, replaceTags, applyFilter);
         datastore.storeTransactions(newTransactions, false);
     }
 }

@@ -87,6 +87,7 @@ public class Schema {
             new DescriptionPatternTagRule(".*(?i)(LETS DISH).*", CATEGORY_GROCERIES),
             new DescriptionPatternTagRule(".*(?i)(TRADER JOE).*", CATEGORY_GROCERIES),
             new DescriptionPatternTagRule(".*(?i)(WINESTREET SPIRITS).*", CATEGORY_GROCERIES),
+            new DescriptionPatternTagRule(".*(?i)(WHO GIVES A CRAP, INC).*", CATEGORY_GROCERIES),
 
             new DescriptionPatternTagRule(".*(?i)(EMERGENCY PHYSICIAN PR).*", CATEGORY_HEALTH),
             new DescriptionPatternTagRule(".*(?i)(ENTIRA FAMILY CLINICS).*", CATEGORY_HEALTH),
@@ -166,7 +167,6 @@ public class Schema {
             new DescriptionPatternTagRule(".*(?i)(TARGET CARD SRVC).*", CATEGORY_SHOPPING),
             new DescriptionPatternTagRule(".*(?i)(TRACTOR SUPPLY CO).*", CATEGORY_SHOPPING),
             new DescriptionPatternTagRule(".*(?i)(WALGREENS).*", CATEGORY_SHOPPING),
-            new DescriptionPatternTagRule(".*(?i)(WHO GIVES A CRAP, INC).*", CATEGORY_SHOPPING),
 
             new DescriptionPatternTagRule(".*(?i)(EMAGINE WHITE BEAR).*", CATEGORY_SHOWS),
             new DescriptionPatternTagRule(".*(?i)(MARCUS OAKDALE CINE).*", CATEGORY_SHOWS),
