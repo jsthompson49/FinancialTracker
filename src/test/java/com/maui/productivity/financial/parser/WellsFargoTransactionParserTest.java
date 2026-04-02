@@ -15,14 +15,14 @@ public class WellsFargoTransactionParserTest {
 
     @Test
     public void testParseSuccess() throws Exception {
-        final List<Transaction> transactions = parser.parse(new StringReader(Artifacts.TEST_DATA_CSV));
+        final List<Transaction> transactions = parser.parse(Artifacts.TEST_DATA_CSV);
 
         assertThat(transactions).isEqualTo(Artifacts.TEST_DATA_TRANSACTIONS);
     }
 
     @Test
     public void testParseNoInput() throws Exception {
-        final List<Transaction> transactions = parser.parse(new StringReader(""));
+        final List<Transaction> transactions = parser.parse("");
 
         assertThat(transactions).isEmpty();
     }

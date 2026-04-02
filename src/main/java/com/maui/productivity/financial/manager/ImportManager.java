@@ -7,8 +7,12 @@ import com.maui.productivity.financial.parser.TransactionParser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -36,7 +40,8 @@ public class ImportManager {
                                                             final TransactionStore transactionStore,
                                                             final boolean removeDuplicates) {
         try {
-            final List<Transaction> parsedTransactions = transactionParser.parse(new FileReader(pathToFile));
+            final String content = new String(Files.readAllBytes(Paths.get(pathToFile)), StandardCharsets.UTF_8);
+            final List<Transaction> parsedTransactions = transactionParser.parse(content);
 
             final List<Transaction> newTransactions = removeDuplicates ? removeDuplicates(parsedTransactions, transactionStore) : parsedTransactions;
             log.info("Import transactions: parsed={} new={}", parsedTransactions.size(), newTransactions.size());

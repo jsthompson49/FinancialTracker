@@ -39,7 +39,7 @@ public class ImportManagerTest {
 
     @Test
     public void testImportTransactionsDryrunKeepDuplicatesSuccess() throws Exception {
-        when(transactionParser.parse(any(FileReader.class))).thenReturn(Artifacts.TEST_IMPORT_TRANSACTIONS);
+        when(transactionParser.parse(any(String.class))).thenReturn(Artifacts.TEST_IMPORT_TRANSACTIONS);
 
         when(transactionStore.fetchTransactions()).thenReturn(Artifacts.buildTaggedTransactions(Artifacts.TEST_DATE_SORTED_COMBINED_TRANSACTIONS));
 
@@ -55,7 +55,7 @@ public class ImportManagerTest {
 
     @Test
     public void testImportTransactionsApplyTagsSuccess() throws Exception {
-        when(transactionParser.parse(any(FileReader.class))).thenReturn(Artifacts.TEST_IMPORT_TRANSACTIONS);
+        when(transactionParser.parse(any(String.class))).thenReturn(Artifacts.TEST_IMPORT_TRANSACTIONS);
 
         when(transactionStore.fetchTransactions()).thenReturn(Artifacts.buildTaggedTransactions(Artifacts.TEST_DATA_TRANSACTIONS));
 
@@ -74,7 +74,7 @@ public class ImportManagerTest {
 
     @Test
     public void testImportTransactionsKeepDuplicatesSuccess() throws Exception {
-        when(transactionParser.parse(any(FileReader.class))).thenReturn(Artifacts.TEST_IMPORT_TRANSACTIONS);
+        when(transactionParser.parse(any(String.class))).thenReturn(Artifacts.TEST_IMPORT_TRANSACTIONS);
 
         when(transactionStore.fetchTransactions()).thenReturn(Artifacts.buildTaggedTransactions(Artifacts.TEST_DATE_SORTED_COMBINED_TRANSACTIONS));
 
@@ -91,7 +91,7 @@ public class ImportManagerTest {
 
     @Test
     public void testImportTransactionsRemoveDuplicatesSuccess() throws Exception {
-        when(transactionParser.parse(any(FileReader.class))).thenReturn(Artifacts.TEST_IMPORT_TRANSACTIONS);
+        when(transactionParser.parse(any(String.class))).thenReturn(Artifacts.TEST_IMPORT_TRANSACTIONS);
 
         when(transactionStore.fetchTransactions()).thenReturn(Artifacts.buildTaggedTransactions(Artifacts.TEST_DATE_SORTED_COMBINED_TRANSACTIONS));
 
@@ -107,7 +107,7 @@ public class ImportManagerTest {
     }
         @Test
     public void testImportTransactionsRemoveDuplicatesNoDupicatesSuccess() throws Exception {
-        when(transactionParser.parse(any(FileReader.class))).thenReturn(Artifacts.TEST_IMPORT_TRANSACTIONS);
+        when(transactionParser.parse(any(String.class))).thenReturn(Artifacts.TEST_IMPORT_TRANSACTIONS);
 
         when(transactionStore.fetchTransactions()).thenReturn(Artifacts.buildTaggedTransactions(Artifacts.TEST_DATA_TRANSACTIONS));
 

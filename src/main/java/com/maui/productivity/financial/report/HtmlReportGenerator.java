@@ -97,9 +97,10 @@ public class HtmlReportGenerator {
                 ? "Rollup " + periods.getFirst().toString()
                 : String.format("Rollup %s to %s", periods.getFirst(), periods.getLast());
         final List<DomContent> bodyContent = new ArrayList<>();
-        periodTables.entrySet().forEach(entry -> {
-            bodyContent.add(h2(entry.getKey()));
-            bodyContent.add(entry.getValue());
+        periods.forEach(period -> {
+            final String periodKey = period.toString();
+            bodyContent.add(h2(periodKey));
+            bodyContent.add(periodTables.get(periodKey));
         });
         bodyContent.add(h3("Overall Total = " + currencyTotal));
 

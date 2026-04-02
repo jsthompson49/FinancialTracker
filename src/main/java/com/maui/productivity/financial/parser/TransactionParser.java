@@ -7,5 +7,6 @@ import java.io.Reader;
 import java.util.List;
 
 public interface TransactionParser {
-    List<Transaction> parse(final Reader reader) throws IOException;
+    boolean isValidFormat(final String data);
+    List<Transaction> parse(final String data) throws IOException;
 }

@@ -7,18 +7,17 @@ import com.maui.productivity.financial.datastore.TransactionStore;
 import com.maui.productivity.financial.manager.ImportManager;
 import com.maui.productivity.financial.manager.ReportManager;
 import com.maui.productivity.financial.manager.TagManager;
-import com.maui.productivity.financial.manager.TransactionFilters;
-import com.maui.productivity.financial.manager.tag.DesignatedDateAmountTagRule;
 import com.maui.productivity.financial.manager.tag.DesignatedTransactions;
 import com.maui.productivity.financial.manager.tag.Schema;
 import com.maui.productivity.financial.model.TagRule;
 import com.maui.productivity.financial.model.TaggedTransaction;
+import com.maui.productivity.financial.parser.AmericanExpressTransactionParser;
+import com.maui.productivity.financial.parser.MultipleAutoDetectTransactionParser;
 import com.maui.productivity.financial.parser.TransactionParser;
 import com.maui.productivity.financial.parser.WellsFargoTransactionParser;
 import com.maui.productivity.financial.report.HtmlReportGenerator;
 import lombok.extern.log4j.Log4j2;
 
-import java.time.LocalDate;
 import java.time.Month;
 import java.time.Year;
 import java.time.YearMonth;
@@ -39,10 +38,14 @@ public class Main {
         objectMapper.findAndRegisterModules();
 
         tagRules.addAll(Schema.TAG_RULES);
-        tagRules.add(new DesignatedDateAmountTagRule(DesignatedTransactions.getDesignatedTransactions()));
+        tagRules.add(DesignatedTransactions.getDesignatedTransactions());
+        tagRules.addAll(DesignatedTransactions.getCheckTagRules());
     }
 
-    private static final TransactionParser transactionParser = new WellsFargoTransactionParser();
+    private static final TransactionParser transactionParser = new MultipleAutoDetectTransactionParser(List.of(
+            new WellsFargoTransactionParser(),
+            new AmericanExpressTransactionParser()
+    ));
     private static final TagManager tagManager = new TagManager(tagRules);
     private static final ImportManager importManager = new ImportManager(transactionParser, tagManager);
     private static final YearlyBudget yearlyBudget = new YearlyBudget();
@@ -53,14 +56,15 @@ public class Main {
         log.info("Hello and welcome!");
 
         final boolean dryrun = false;
-        final boolean importTransactions = false;
+        final boolean importTransactions = true;
         final boolean report = true;
         //final Predicate<TaggedTransaction> reapplyFilter = TransactionFilters.getFilter(TransactionFilters.getDateOnFilter(LocalDate.of(2026, 2, 23)));
         final Predicate<TaggedTransaction> reapplyFilter = null;
 
-        //final String pathToImportFile = "data/Checking-030126.csv";
-        //final String pathToImportFile = "data/CreditCardSecondary-030126.csv";
-        final String pathToImportFile = "data/CreditCard-030426.csv";
+        //final String pathToImportFile = "data/CreditCardAE-040226.csv";
+        //final String pathToImportFile = "data/Checking-040126.csv";
+        //final String pathToImportFile = "data/CreditCardSecondary-040126.csv";
+        final String pathToImportFile = "data/CreditCard-040226.csv";
 
         try {
             if (dryrun) {
@@ -87,7 +91,8 @@ public class Main {
 
                     final List<YearMonth> months = List.of(
                             YearMonth.of(2026, Month.JANUARY),
-                            YearMonth.of(2026, Month.FEBRUARY)
+                            YearMonth.of(2026, Month.FEBRUARY),
+                            YearMonth.of(2026, Month.MARCH)
                     );
 
                     reportManager.reportMonthlyRollup(months, yearlyBudget.getAllCatgories(), taggedTransactions);
