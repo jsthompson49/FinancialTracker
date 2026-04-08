@@ -4,32 +4,31 @@ import com.maui.productivity.financial.model.Transaction;
 import com.maui.productivity.financial.test.Artifacts;
 import org.junit.jupiter.api.Test;
 
-import java.io.StringReader;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class WellsFargoTransactionParserTest {
+public class AmericanExpressTransactionParserTest {
 
-    private final WellsFargoTransactionParser parser = new WellsFargoTransactionParser();
+    private final AmericanExpressTransactionParser parser = new AmericanExpressTransactionParser();
 
     @Test
     public void testIsValidFormatSuccess() {
-        final boolean result = parser.isValidFormat(Artifacts.TEST_DATA_CSV);
+        final boolean result = parser.isValidFormat(Artifacts.TEST_DATA_AE_CSV);
 
         assertThat(result).isTrue();
     }
 
     @Test
     public void testIsValidFormatInvalid() {
-        final boolean result = parser.isValidFormat(Artifacts.TEST_DATA_AE_CSV);
+        final boolean result = parser.isValidFormat(Artifacts.TEST_DATA_CSV);
 
         assertThat(result).isFalse();
     }
 
     @Test
     public void testParseSuccess() throws Exception {
-        final List<Transaction> transactions = parser.parse(Artifacts.TEST_DATA_CSV);
+        final List<Transaction> transactions = parser.parse(Artifacts.TEST_DATA_AE_CSV);
 
         assertThat(transactions).isEqualTo(Artifacts.TEST_DATA_TRANSACTIONS);
     }
