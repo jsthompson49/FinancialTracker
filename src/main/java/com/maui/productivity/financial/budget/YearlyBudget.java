@@ -23,15 +23,15 @@ public class YearlyBudget {
         mapBuilder.put(Schema.HOBBIES, 3_000.0);
         mapBuilder.put(Schema.HOME, 15_000.0);
         mapBuilder.put(Schema.INCOME_TAX, 20_000.0);
-        mapBuilder.put(Schema.INSURANCE, 5_000.0);
+        mapBuilder.put(Schema.INSURANCE, 6_000.0);
         mapBuilder.put(Schema.MEDIA, 3_000.0);
         mapBuilder.put(Schema.PETS, 8_000.0);
         mapBuilder.put(Schema.PROPERTY_TAX, 8_000.0);
         mapBuilder.put(Schema.RESTAURANTS, 18_000.0);
         mapBuilder.put(Schema.SERVICES, 2_000.0);
-        mapBuilder.put(Schema.SHOPPING, 10_000.0);
+        mapBuilder.put(Schema.SHOPPING, 12_000.0);
         mapBuilder.put(Schema.SHOWS, 2_000.0);
-        mapBuilder.put(Schema.SPORTING_EVENT, 5_000.0);
+        mapBuilder.put(Schema.SPORTING_EVENT, 4_000.0);
         mapBuilder.put(Schema.TRAVEL, 40_000.0);
         mapBuilder.put(Schema.UTILITIES, 12_000.0);
     }

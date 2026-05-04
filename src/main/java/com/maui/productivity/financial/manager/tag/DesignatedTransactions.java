@@ -22,11 +22,15 @@ public class DesignatedTransactions {
             new DateAmountForTags(-1000.0, LocalDate.of(2026, Month.MARCH, 23), Set.of(Schema.CATEGORY_CAR)),
             new DateAmountForTags(-17.26, LocalDate.of(2026, Month.MARCH, 24), Set.of(Schema.CATEGORY_TRAVEL)),
             new DateAmountForTags(-144.0, LocalDate.of(2026, Month.MARCH, 26), Set.of(Schema.CATEGORY_TRAVEL)),
-            new DateAmountForTags(2420.0, LocalDate.of(2026, Month.MARCH, 31), Set.of(Schema.CATEGORY_SPORTING_EVENT))
+            new DateAmountForTags(2420.0, LocalDate.of(2026, Month.MARCH, 31), Set.of(Schema.CATEGORY_SPORTING_EVENT)),
+
+            new DateAmountForTags(-350.0, LocalDate.of(2026, Month.APRIL, 17), Set.of(Schema.CATEGORY_TRAVEL)),
+            new DateAmountForTags(-319.53, LocalDate.of(2026, Month.APRIL, 27), Set.of(Schema.CATEGORY_SHOPPING))
     );
 
     private static final List<TagRule> CHECK_TAG_RULES = List.of(
-            new CheckTagRule("4620", Set.of(Schema.CATEGORY_PROPERTY_TAX))
+            new CheckTagRule("4620", Set.of(Schema.CATEGORY_PROPERTY_TAX)),
+            new CheckTagRule("4621", Set.of(Schema.CATEGORY_PROPERTY_TAX))
     );
 
     public static TagRule getDesignatedTransactions() {

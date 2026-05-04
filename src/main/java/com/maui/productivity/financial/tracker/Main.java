@@ -14,6 +14,7 @@ import com.maui.productivity.financial.model.TaggedTransaction;
 import com.maui.productivity.financial.parser.AmericanExpressTransactionParser;
 import com.maui.productivity.financial.parser.MultipleAutoDetectTransactionParser;
 import com.maui.productivity.financial.parser.TransactionParser;
+import com.maui.productivity.financial.parser.WellsFargoRevision2TransactionParser;
 import com.maui.productivity.financial.parser.WellsFargoTransactionParser;
 import com.maui.productivity.financial.report.HtmlReportGenerator;
 import lombok.extern.log4j.Log4j2;
@@ -43,8 +44,9 @@ public class Main {
     }
 
     private static final TransactionParser transactionParser = new MultipleAutoDetectTransactionParser(List.of(
-            new WellsFargoTransactionParser(),
-            new AmericanExpressTransactionParser()
+            new WellsFargoRevision2TransactionParser(),
+            new AmericanExpressTransactionParser(),
+            new WellsFargoTransactionParser()
     ));
     private static final TagManager tagManager = new TagManager(tagRules);
     private static final ImportManager importManager = new ImportManager(transactionParser, tagManager);
@@ -56,15 +58,15 @@ public class Main {
         log.info("Hello and welcome!");
 
         final boolean dryrun = false;
-        final boolean importTransactions = true;
+        final boolean importTransactions = false;
         final boolean report = true;
         //final Predicate<TaggedTransaction> reapplyFilter = TransactionFilters.getFilter(TransactionFilters.getDateOnFilter(LocalDate.of(2026, 2, 23)));
         final Predicate<TaggedTransaction> reapplyFilter = null;
 
-        //final String pathToImportFile = "data/CreditCardAE-040226.csv";
-        //final String pathToImportFile = "data/Checking-040126.csv";
-        //final String pathToImportFile = "data/CreditCardSecondary-040126.csv";
-        final String pathToImportFile = "data/CreditCard-040226.csv";
+        final String pathToImportFile = "data/CreditCardAE-050226.csv";
+        //final String pathToImportFile = "data/Checking-050126.csv";
+        //final String pathToImportFile = "data/CreditCardSecondary-050126.csv";
+        //final String pathToImportFile = "data/CreditCard-050226.csv";
 
         try {
             if (dryrun) {
@@ -92,7 +94,8 @@ public class Main {
                     final List<YearMonth> months = List.of(
                             YearMonth.of(2026, Month.JANUARY),
                             YearMonth.of(2026, Month.FEBRUARY),
-                            YearMonth.of(2026, Month.MARCH)
+                            YearMonth.of(2026, Month.MARCH),
+                            YearMonth.of(2026, Month.APRIL)
                     );
 
                     reportManager.reportMonthlyRollup(months, yearlyBudget.getAllCatgories(), taggedTransactions);

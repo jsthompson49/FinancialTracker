@@ -47,6 +47,10 @@ public class Artifacts {
             + "\"01/29/2026\",\"Desc #1\",\"\",\"\",\"412.06\"\r\n"
             + "\"02/28/2026\",\"Desc #2\",\"\",\"\",\"9017.34\"";
 
+    public static final String TEST_DATA_WF_REV2_CSV = "\"DATE\",\"DESCRIPTION\",\"AMOUNT\",\"CHECK #\",\"STATUS\"\r\n"
+            + "\"01/29/2026\",\"Desc #1\",\"-412.06\",\"\",\"\"\r\n"
+            + "\"02/28/2026\",\"Desc #2\",\"-9017.34\",\"\",\"\"";
+
     public static final List<Transaction> TEST_DATA_TRANSACTIONS = List.of(
             new Transaction(AMOUNT_1, DATE_1, DESC_1),
             new Transaction(AMOUNT_2, DATE_2, DESC_2)
