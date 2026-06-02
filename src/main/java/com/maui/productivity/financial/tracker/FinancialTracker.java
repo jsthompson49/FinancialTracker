@@ -32,48 +32,48 @@ public class FinancialTracker {
                         final String pathToImportFile) {
         log.info("Hello and welcome!");
 
-        try {
-            if (dryrun) {
-                final boolean removeDuplicates = true;
-                final List<TaggedTransaction> taggedTransactions =
-                        importManager.importTransactionsDryrun(pathToImportFile, datastore, removeDuplicates);
+        log.info("Import File: {}", pathToImportFile);
+        log.info("Options: dryrun={} import={} report={}", dryrun, importTransactions, report);
+
+        if (dryrun) {
+            final boolean removeDuplicates = true;
+            final List<TaggedTransaction> taggedTransactions =
+                    importManager.importTransactionsDryrun(pathToImportFile, datastore, removeDuplicates);
+
+            reportManager.listByTag(Schema.CATEGORY, taggedTransactions);
+            reportManager.listUndefined(taggedTransactions);
+        } else {
+            if (importTransactions) {
+                importTransactions(pathToImportFile);
+            }
+
+            if (reapplyFilter != null) {
+                reapplyTags(true /* replace */, reapplyFilter);
+            }
+
+            if (report) {
+                final List<TaggedTransaction> taggedTransactions = datastore.fetchTransactions();
 
                 reportManager.listByTag(Schema.CATEGORY, taggedTransactions);
                 reportManager.listUndefined(taggedTransactions);
-            } else {
-                if (importTransactions) {
-                    importTransactions(pathToImportFile);
-                }
 
-                if (reapplyFilter != null) {
-                    reapplyTags(true /* replace */, reapplyFilter);
-                }
+                final List<YearMonth> months = List.of(
+                        YearMonth.of(2026, Month.JANUARY),
+                        YearMonth.of(2026, Month.FEBRUARY),
+                        YearMonth.of(2026, Month.MARCH),
+                        YearMonth.of(2026, Month.APRIL),
+                        YearMonth.of(2026, Month.MAY)
+                );
 
-                if (report) {
-                    final List<TaggedTransaction> taggedTransactions = datastore.fetchTransactions();
+                reportManager.reportMonthlyRollup(months, yearlyBudget.getAllCatgories(), taggedTransactions);
 
-                    reportManager.listByTag(Schema.CATEGORY, taggedTransactions);
-                    reportManager.listUndefined(taggedTransactions);
+                reportManager.reportYearlyRollup(List.of(Year.of(2026)), yearlyBudget.getAllCatgories(), taggedTransactions);
 
-                    final List<YearMonth> months = List.of(
-                            YearMonth.of(2026, Month.JANUARY),
-                            YearMonth.of(2026, Month.FEBRUARY),
-                            YearMonth.of(2026, Month.MARCH),
-                            YearMonth.of(2026, Month.APRIL)
-                    );
-
-                    reportManager.reportMonthlyRollup(months, yearlyBudget.getAllCatgories(), taggedTransactions);
-
-                    reportManager.reportYearlyRollup(List.of(Year.of(2026)), yearlyBudget.getAllCatgories(), taggedTransactions);
-
-                    reportManager.reportYearlyBudgetProgress(Year.of(2026), yearlyBudget, taggedTransactions);
-                }
+                reportManager.reportYearlyBudgetProgress(Year.of(2026), yearlyBudget, taggedTransactions);
             }
-
-            log.info("Completed successfully");
-        } catch (final Exception e) {
-            log.error("Error in program", e);
         }
+
+        log.info("Completed successfully");
     }
 
     private void importTransactions(final String pathToFile) {
