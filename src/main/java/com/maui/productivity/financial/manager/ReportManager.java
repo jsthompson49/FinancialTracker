@@ -16,6 +16,7 @@ import java.time.LocalDate;
 import java.time.Year;
 import java.time.YearMonth;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -55,11 +56,23 @@ public class ReportManager {
         undefinedTagTransactions.forEach(taggedTransaction -> log.info("{}", taggedTransaction));
     }
 
-    public void reportMonthlyRollup(final List<YearMonth> months, final Set<String> categories, final List<TaggedTransaction> taggedTransactions) {
+    public void reportMonthlyRollup(final List<YearMonth> months, final Set<String> categories,
+                                    final List<TaggedTransaction> taggedTransactions) {
         final MonthlyCategoryDataAccessor dataAccessor = new MonthlyCategoryDataAccessor(taggedTransactions, tagManager);
 
         final String html = reportGenerator.reportRollup(months, dataAccessor, categories);
         writeFile(html, "./target/reports/monthlyRollup.html");
+    }
+
+    public void reportMonthlyTotals(final List<YearMonth> months, final Set<String> categories,
+                                    final List<TaggedTransaction> taggedTransactions, final YearlyBudget yearlyBudget) {
+        final MonthlyCategoryDataAccessor dataAccessor = new MonthlyCategoryDataAccessor(taggedTransactions, tagManager);
+        final Map<String, Double> categoryBudget = new HashMap<>();
+        yearlyBudget.getAmounts(Year.of(months.get(0).getYear())).entrySet().stream()
+                .forEach(entry -> categoryBudget.put(entry.getKey(), entry.getValue() / 12.0d));
+
+        final String html = reportGenerator.reportCategoryTotalsByPeriod(months, dataAccessor, categories, categoryBudget);
+        writeFile(html, "./target/reports/monthlyTotals.html");
     }
 
     public void reportYearlyRollup(final List<Year> years, final Set<String> categories, final List<TaggedTransaction> taggedTransactions) {

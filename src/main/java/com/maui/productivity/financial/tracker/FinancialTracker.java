@@ -14,6 +14,7 @@ import java.time.Month;
 import java.time.Year;
 import java.time.YearMonth;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Predicate;
 
 @Log4j2
@@ -65,9 +66,13 @@ public class FinancialTracker {
                         YearMonth.of(2026, Month.MAY)
                 );
 
-                reportManager.reportMonthlyRollup(months, yearlyBudget.getAllCatgories(), taggedTransactions);
+                final Set<String> yearlyCategories = yearlyBudget.getAllCategories();
 
-                reportManager.reportYearlyRollup(List.of(Year.of(2026)), yearlyBudget.getAllCatgories(), taggedTransactions);
+                reportManager.reportMonthlyRollup(months, yearlyCategories, taggedTransactions);
+
+                reportManager.reportMonthlyTotals(months, yearlyCategories, taggedTransactions, yearlyBudget);
+
+                reportManager.reportYearlyRollup(List.of(Year.of(2026)), yearlyCategories, taggedTransactions);
 
                 reportManager.reportYearlyBudgetProgress(Year.of(2026), yearlyBudget, taggedTransactions);
             }

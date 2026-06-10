@@ -70,7 +70,7 @@ public class YearlyBudget {
         return CATEGORY_AMOUNTS;
     }
 
-    public Set<String> getAllCatgories() {
+    public Set<String> getAllCategories() {
         return MAJOR_CATEGORIES.values().stream()
                 .flatMap(Collection::stream)
                 .collect(Collectors.toSet());

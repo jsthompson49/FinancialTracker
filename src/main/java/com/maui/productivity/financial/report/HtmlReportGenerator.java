@@ -36,6 +36,41 @@ public class HtmlReportGenerator {
 
     private static final String RIGHT_ALIGN = "right-align";
 
+    public <P, A extends DataAccessor<P>> String reportCategoryTotalsByPeriod(final List<P> periods,
+                                                                              final A dataAccessor,
+                                                                              final Set<String> categories,
+                                                                              final Map<String, Double> categoryBudget) {
+
+        final TableTag table = table().with(
+                thead(
+                        tr(
+                                th("Category"),
+                                th("Budget"),
+                                each(periods, period -> th(period.toString()))
+                        )
+                ),
+                tbody(
+                        each(categories, category -> tr(
+                                td(category),
+                                td(CURRENCY_FORMAT.format(categoryBudget.get(category))).withClass(RIGHT_ALIGN),
+                                each(periods, period -> {
+                                    final List<TaggedTransaction> transactions = dataAccessor.getTransactions(period, category);
+                                    final double categoryTotal = transactions.stream()
+                                            .map(TaggedTransaction::getTransaction)
+                                            .mapToDouble(Transaction::getAmount)
+                                            .sum();
+                                    return td(CURRENCY_FORMAT.format(categoryTotal)).withClass(RIGHT_ALIGN);
+                                })
+                            )
+                        )
+                )
+        );
+
+        final String title = String.format("Totals from %s to %s", periods.getFirst(), periods.getLast());
+
+        return render(title, List.of(table));
+    }
+
     public <P, A extends DataAccessor<P>> String reportRollup(final List<P> periods, final A dataAccessor, final Set<String> categories) {
 
         final Map<String, TableTag> periodTables = new HashMap<>();
