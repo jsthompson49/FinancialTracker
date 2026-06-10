@@ -25,12 +25,17 @@ public class DesignatedTransactions {
             new DateAmountForTags(2420.0, LocalDate.of(2026, Month.MARCH, 31), Set.of(Schema.CATEGORY_SPORTING_EVENT)),
 
             new DateAmountForTags(-350.0, LocalDate.of(2026, Month.APRIL, 17), Set.of(Schema.CATEGORY_TRAVEL)),
-            new DateAmountForTags(-319.53, LocalDate.of(2026, Month.APRIL, 27), Set.of(Schema.CATEGORY_SHOPPING))
+            new DateAmountForTags(-319.53, LocalDate.of(2026, Month.APRIL, 27), Set.of(Schema.CATEGORY_SHOPPING)),
+
+            new DateAmountForTags(-147.17, LocalDate.of(2026, Month.MAY, 4), Set.of(Schema.CATEGORY_RESTAURANTS)),
+            new DateAmountForTags(-975.86, LocalDate.of(2026, Month.MAY, 10), Set.of(Schema.CATEGORY_HOME)),
+            new DateAmountForTags(-39.02, LocalDate.of(2026, Month.MAY, 21), Set.of(Schema.CATEGORY_HOME))
     );
 
     private static final List<TagRule> CHECK_TAG_RULES = List.of(
-            new CheckTagRule("4620", Set.of(Schema.CATEGORY_PROPERTY_TAX)),
-            new CheckTagRule("4621", Set.of(Schema.CATEGORY_PROPERTY_TAX))
+            new CheckTagRule("4622", Set.of(Schema.CATEGORY_HEALTH)),
+            new CheckTagRule("4621", Set.of(Schema.CATEGORY_PROPERTY_TAX)),
+            new CheckTagRule("4620", Set.of(Schema.CATEGORY_PROPERTY_TAX))
     );
 
     public static TagRule getDesignatedTransactions() {
