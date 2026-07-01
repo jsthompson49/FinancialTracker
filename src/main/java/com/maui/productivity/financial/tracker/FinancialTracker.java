@@ -13,6 +13,7 @@ import lombok.extern.log4j.Log4j2;
 import java.time.Month;
 import java.time.Year;
 import java.time.YearMonth;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
@@ -58,13 +59,8 @@ public class FinancialTracker {
                 reportManager.listByTag(Schema.CATEGORY, taggedTransactions);
                 reportManager.listUndefined(taggedTransactions);
 
-                final List<YearMonth> months = List.of(
-                        YearMonth.of(2026, Month.JANUARY),
-                        YearMonth.of(2026, Month.FEBRUARY),
-                        YearMonth.of(2026, Month.MARCH),
-                        YearMonth.of(2026, Month.APRIL),
-                        YearMonth.of(2026, Month.MAY)
-                );
+                final List<YearMonth> months = getCurrentYearToDateMonths();
+                final Year year = Year.of(months.get(0).getYear());
 
                 final Set<String> yearlyCategories = yearlyBudget.getAllCategories();
 
@@ -72,13 +68,30 @@ public class FinancialTracker {
 
                 reportManager.reportMonthlyTotals(months, yearlyCategories, taggedTransactions, yearlyBudget);
 
-                reportManager.reportYearlyRollup(List.of(Year.of(2026)), yearlyCategories, taggedTransactions);
+                reportManager.reportYearlyRollup(List.of(year), yearlyCategories, taggedTransactions);
 
-                reportManager.reportYearlyBudgetProgress(Year.of(2026), yearlyBudget, taggedTransactions);
+                reportManager.reportYearlyBudgetProgress(year, yearlyBudget, taggedTransactions);
             }
         }
 
         log.info("Completed successfully");
+    }
+
+    private List<YearMonth> getCurrentYearToDateMonths() {
+        final YearMonth now = YearMonth.now();
+
+        final YearMonth startOfYear = now.withMonth(1);
+        final List<YearMonth> yearToDateMonths = new ArrayList<>();
+        YearMonth yearMonth = startOfYear;
+        while (true) {
+            yearToDateMonths.add(yearMonth);
+            if (yearMonth.equals(now)) {
+                break;
+            }
+            yearMonth = yearMonth.plusMonths(1);
+        }
+
+        return yearToDateMonths;
     }
 
     private void importTransactions(final String pathToFile) {

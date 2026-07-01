@@ -12,6 +12,7 @@ public class ConfigurationManager {
     private static final String DEFAULT_CONFIG_PROPERTIES_RESOURCE_FILE_NAME = "config.properties";
 
     private static final String DATASTORE_PATH_TO_TRANSACTIONS_JSON = "datastore.pathToTransactionsJson";
+    private static final String DATASTORE_PATH_TO_META_DATA = "datastore.pathToMetaData";
 
     final Properties properties = new Properties();
 
@@ -37,5 +38,9 @@ public class ConfigurationManager {
 
     public String getPathToTransactionStore() {
         return properties.getProperty(DATASTORE_PATH_TO_TRANSACTIONS_JSON);
+    }
+
+    public String getDatastorePathToMetaData() {
+        return properties.getProperty(DATASTORE_PATH_TO_META_DATA);
     }
 }
