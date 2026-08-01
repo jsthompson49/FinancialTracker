@@ -31,7 +31,8 @@ public class FinancialTracker {
                         final boolean importTransactions,
                         final boolean report,
                         final Predicate<TaggedTransaction> reapplyFilter,
-                        final String pathToImportFile) {
+                        final String pathToImportFile,
+                        final String importData) {
         log.info("Hello and welcome!");
 
         log.info("Import File: {}", pathToImportFile);
@@ -40,13 +41,19 @@ public class FinancialTracker {
         if (dryrun) {
             final boolean removeDuplicates = true;
             final List<TaggedTransaction> taggedTransactions =
-                    importManager.importTransactionsDryrun(pathToImportFile, datastore, removeDuplicates);
+                    (pathToImportFile == null) ?
+                            importManager.importTransactionsDataDryrun(importData, datastore, removeDuplicates) :
+                            importManager.importTransactionsDryrun(pathToImportFile, datastore, removeDuplicates);
 
             reportManager.listByTag(Schema.CATEGORY, taggedTransactions);
             reportManager.listUndefined(taggedTransactions);
         } else {
             if (importTransactions) {
-                importTransactions(pathToImportFile);
+                if (pathToImportFile == null) {
+                    importManager.importTransactionsData(importData, datastore, true);
+                } else {
+                    importManager.importTransactions(pathToImportFile, datastore, true);
+                }
             }
 
             if (reapplyFilter != null) {
@@ -92,10 +99,6 @@ public class FinancialTracker {
         }
 
         return yearToDateMonths;
-    }
-
-    private void importTransactions(final String pathToFile) {
-        importManager.importTransactions(pathToFile, datastore, true);
     }
 
     private void reapplyTags(final boolean replaceTags, final Predicate<TaggedTransaction> applyFilter) {

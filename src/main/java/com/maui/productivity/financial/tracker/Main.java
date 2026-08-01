@@ -18,6 +18,7 @@ public class Main {
     private static final String IMPORT = "import";
     private static final String REPORT = "report";
     private static final String IMPORT_FILE_PATH = "importFilePath";
+    private static final String TRANSACTION_CSV = "transactionCsv";
 
     public static void main(String[] args) {
         try {
@@ -28,6 +29,7 @@ public class Main {
             options.addOption(IMPORT, false, "Import transactions and save, default: false");
             options.addOption(REPORT, false, "Generate report of transactions, default: true");
             options.addOption(IMPORT_FILE_PATH, true, "Path to import transactions file");
+            options.addOption(TRANSACTION_CSV, true, "Transaction CSV data");
 
             final CommandLine commandLine = new DefaultParser().parse(options, args);
 
@@ -45,12 +47,12 @@ public class Main {
             //final String pathToImportFile = "data/CreditCardSecondary-050126.csv";
             //final String pathToImportFile = "data/CreditCard-050226.csv";
 
+            final String importFilePath = commandLine.getParsedOptionValue(IMPORT_FILE_PATH);
+            final String transactionCsvData = commandLine.getParsedOptionValue(TRANSACTION_CSV);
+
             financialTracker.execute(
-                    commandLine.hasOption(DRYRUN),
-                    commandLine.hasOption(IMPORT),
-                    commandLine.hasOption(REPORT),
-                    reapplyFilter,
-                    commandLine.getParsedOptionValue(IMPORT_FILE_PATH));
+                    commandLine.hasOption(DRYRUN), commandLine.hasOption(IMPORT), commandLine.hasOption(REPORT),
+                    reapplyFilter, importFilePath, transactionCsvData);
         } catch (final Exception e) {
             log.error("Error in program", e);
         }

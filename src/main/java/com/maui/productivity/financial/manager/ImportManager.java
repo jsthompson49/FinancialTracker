@@ -23,6 +23,12 @@ public class ImportManager {
     private final TransactionParser transactionParser;
     private final TagManager tagManager;
 
+    public List<TaggedTransaction> importTransactionsDataDryrun(final String dataContent,
+                                                                final TransactionStore transactionStore,
+                                                                final boolean removeDuplicates) {
+        return parseAndTagTransactionsForContent(dataContent, transactionStore, removeDuplicates);
+    }
+
     public List<TaggedTransaction> importTransactionsDryrun(final String pathToFile,
                                                             final TransactionStore transactionStore,
                                                             final boolean removeDuplicates) {
@@ -36,11 +42,29 @@ public class ImportManager {
         log.info("Appended {} new transactions", newTaggedTransactions.size());
     }
 
+    public void importTransactionsData(final String dataContent, final TransactionStore transactionStore, final boolean removeDuplicates) {
+        final List<TaggedTransaction> newTaggedTransactions = parseAndTagTransactionsForContent(dataContent, transactionStore, removeDuplicates);
+
+        transactionStore.storeTransactions(newTaggedTransactions, true /* append */);
+        log.info("Appended {} new transactions", newTaggedTransactions.size());
+    }
+
     private List<TaggedTransaction> parseAndTagTransactions(final String pathToFile,
                                                             final TransactionStore transactionStore,
                                                             final boolean removeDuplicates) {
         try {
             final String content = new String(Files.readAllBytes(Paths.get(pathToFile)), StandardCharsets.UTF_8);
+
+            return parseAndTagTransactionsForContent(content, transactionStore, removeDuplicates);
+        } catch (final IOException ioException) {
+            throw new RuntimeException(ioException);
+        }
+    }
+
+    private List<TaggedTransaction> parseAndTagTransactionsForContent(final String content,
+                                                                      final TransactionStore transactionStore,
+                                                                      final boolean removeDuplicates) {
+        try {
             final List<Transaction> parsedTransactions = transactionParser.parse(content);
 
             final List<Transaction> newTransactions = removeDuplicates ? removeDuplicates(parsedTransactions, transactionStore) : parsedTransactions;

@@ -12,6 +12,7 @@ import com.maui.productivity.financial.manager.tag.Schema;
 import com.maui.productivity.financial.model.TagRule;
 import com.maui.productivity.financial.parser.AmericanExpressTransactionParser;
 import com.maui.productivity.financial.parser.BudgetParser;
+import com.maui.productivity.financial.parser.CommandLineDataTransactionParser;
 import com.maui.productivity.financial.parser.MultipleAutoDetectTransactionParser;
 import com.maui.productivity.financial.parser.TransactionParser;
 import com.maui.productivity.financial.parser.WellsFargoRevision2TransactionParser;
@@ -42,7 +43,8 @@ public class DependencyInjector {
         final TransactionParser transactionParser = new MultipleAutoDetectTransactionParser(List.of(
                 new WellsFargoRevision2TransactionParser(),
                 new AmericanExpressTransactionParser(),
-                new WellsFargoTransactionParser()
+                new WellsFargoTransactionParser(),
+                new CommandLineDataTransactionParser()
         ));
 
         final ImportManager importManager = new ImportManager(transactionParser, tagManager);

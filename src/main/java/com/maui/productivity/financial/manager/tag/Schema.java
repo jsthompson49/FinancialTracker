@@ -62,6 +62,8 @@ public class Schema {
     public static final Tag CATEGORY_WAGES = new Tag(CATEGORY, WAGES);
 
     public static List<TagRule> TAG_RULES = List.of(
+            new DescriptionPatternTagRule(".*(?i)(CONDO).*", CATEGORY_REAL_ESTATE_COUNTY_ROAD_F),
+
             new DescriptionPatternTagRule(".*(?i)(ATM WITHDRAWAL).*", CATEGORY_CASH),
 
             new DescriptionPatternTagRule(".*(?i)(GESMN).*", CATEGORY_DONATION),
