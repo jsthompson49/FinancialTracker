@@ -34,7 +34,10 @@ public class DesignatedTransactions {
             new DateAmountForTags(-5000.0, LocalDate.of(2026, Month.JUNE, 9), Set.of(Schema.CATEGORY_TUITION)),
             new DateAmountForTags(-2227.0, LocalDate.of(2026, Month.JUNE, 22), Set.of(Schema.CATEGORY_CASH)),
             new DateAmountForTags(1580.0, LocalDate.of(2026, Month.JUNE, 22), Set.of(Schema.CATEGORY_CASH)),
-            new DateAmountForTags(-192.92, LocalDate.of(2026, Month.JUNE, 26), Set.of(Schema.CATEGORY_SHOWS))
+            new DateAmountForTags(-192.92, LocalDate.of(2026, Month.JUNE, 26), Set.of(Schema.CATEGORY_SHOWS)),
+
+            new DateAmountForTags(-360.99, LocalDate.of(2026, Month.JULY, 4), Set.of(Schema.CATEGORY_SHOPPING)),
+            new DateAmountForTags(-141.94, LocalDate.of(2026, Month.JULY, 26), Set.of(Schema.CATEGORY_REAL_ESTATE_COUNTY_ROAD_F))
     );
 
     private static final List<TagRule> CHECK_TAG_RULES = List.of(
